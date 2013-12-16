@@ -1,0 +1,659 @@
+(7,7,30)
+
+This program generates the numbers 0.5, -1.0, e, i, and tau (2pi), clearing the screen after each number.
+
+Do a lot of computation to wait for the window to open and stuff
+
+   MAKE TAU:
+
+      MAKE TAU/2:
+
+         MAKE TAU/4:
+
+            MAKE I:
+
+               MAKE -1:
+
+                  MAKE 2:
+                  EXP. SELECT.
+                  EXP. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. 
+                  END MAKE 2
+                  
+               RIGHT. 
+                  
+                  MAKE 1/2:
+                  RIGHT. EXP. SELECT.
+                  EXP. LEFT. SELECT.
+                  RIGHT. LOG. LEFT. SELECT.
+                  LOG. RIGHT. SELECT.
+                  EXP. LEFT. SELECT.
+                  
+                  END MAKE 1/2
+                  
+               LOG. LEFT. SELECT.
+               RIGHT. 
+               END MAKE -1
+               
+            LEFT. EXP. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            RIGHT. 
+            END MAKE I
+            
+         LOG. RIGHT. SELECT.
+
+            MAKE E:
+
+               MAKE 2:
+               EXP. SELECT.
+               EXP. RIGHT. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
+               LEFT. 
+               END MAKE 2
+               
+            RIGHT. 
+               
+               MAKE -1:
+
+                  MAKE 2:
+                  EXP. SELECT.
+                  EXP. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. 
+                  END MAKE 2
+                  
+               RIGHT. 
+                  
+                  MAKE 1/2:
+                  RIGHT. EXP. SELECT.
+                  EXP. LEFT. SELECT.
+                  RIGHT. LOG. LEFT. SELECT.
+                  LOG. RIGHT. SELECT.
+                  EXP. LEFT. SELECT.
+                  
+                  END MAKE 1/2
+                  
+               LOG. LEFT. SELECT.
+               RIGHT. 
+               END MAKE -1
+               
+            LEFT. LEFT. EXP. SELECT.
+            EXP. SELECT.
+            EXP. SELECT.
+            LOG. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. EXP. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. 
+               
+               (multiply)
+               RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+               RIGHT. RIGHT. EXP. LEFT. SELECT.
+               RIGHT. LOG. RIGHT. SELECT.
+               LEFT. 
+            LOG. RIGHT. SELECT.
+            LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+            END MAKE E
+            
+         LOG. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+
+            MAGNITUDE:
+            RIGHT. 
+               
+               MAKE 1/2:
+               RIGHT. EXP. SELECT.
+               EXP. LEFT. SELECT.
+               RIGHT. LOG. LEFT. SELECT.
+               LOG. RIGHT. SELECT.
+               EXP. LEFT. SELECT.
+               
+               END MAKE 1/2
+               
+            RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. CONJ. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. LEFT. 
+               
+               (multiply)
+               RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+               RIGHT. RIGHT. EXP. LEFT. SELECT.
+               RIGHT. LOG. RIGHT. SELECT.
+               LEFT. 
+            EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. 
+            END MAGNITUDE
+
+         END MAKE TAU/4
+         
+      RIGHT. 
+         
+         MAKE 2:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 2
+         
+      LEFT. 
+         
+         (multiply)
+         RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. SELECT.
+         RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+      
+      END MAKE TAU/2
+      
+   LEFT. 
+      
+      (multiply)
+      RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. EXP. LEFT. SELECT.
+      RIGHT. LOG. RIGHT. SELECT.
+      LEFT. 
+   
+   END MAKE TAU
+   
+RIGHT. 
+   
+   MAKE 1/2:
+   RIGHT. EXP. SELECT.
+   EXP. LEFT. SELECT.
+   RIGHT. LOG. LEFT. SELECT.
+   LOG. RIGHT. SELECT.
+   EXP. LEFT. SELECT.
+   
+   END MAKE 1/2
+   
+PRINT. RIGHT. 
+   
+   MAKE -1:
+
+      MAKE 2:
+      EXP. SELECT.
+      EXP. RIGHT. SELECT.
+      LEFT. LOG. RIGHT. SELECT.
+      LEFT. LOG. RIGHT. SELECT.
+      LEFT. 
+      END MAKE 2
+      
+   RIGHT. 
+      
+      MAKE 1/2:
+      RIGHT. EXP. SELECT.
+      EXP. LEFT. SELECT.
+      RIGHT. LOG. LEFT. SELECT.
+      LOG. RIGHT. SELECT.
+      EXP. LEFT. SELECT.
+      
+      END MAKE 1/2
+      
+   LOG. LEFT. SELECT.
+   RIGHT. 
+   END MAKE -1
+   
+CLEAR. PRINT. RIGHT. 
+   
+   MAKE E:
+
+      MAKE 2:
+      EXP. SELECT.
+      EXP. RIGHT. SELECT.
+      LEFT. LOG. RIGHT. SELECT.
+      LEFT. LOG. RIGHT. SELECT.
+      LEFT. 
+      END MAKE 2
+      
+   RIGHT. 
+      
+      MAKE -1:
+
+         MAKE 2:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 2
+         
+      RIGHT. 
+         
+         MAKE 1/2:
+         RIGHT. EXP. SELECT.
+         EXP. LEFT. SELECT.
+         RIGHT. LOG. LEFT. SELECT.
+         LOG. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         
+         END MAKE 1/2
+         
+      LOG. LEFT. SELECT.
+      RIGHT. 
+      END MAKE -1
+      
+   LEFT. LEFT. EXP. SELECT.
+   EXP. SELECT.
+   EXP. SELECT.
+   LOG. RIGHT. SELECT.
+   LEFT. EXP. RIGHT. SELECT.
+   LEFT. EXP. RIGHT. SELECT.
+   LEFT. EXP. RIGHT. SELECT.
+   RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+   RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+   LEFT. EXP. LEFT. SELECT.
+   RIGHT. RIGHT. EXP. LEFT. SELECT.
+   RIGHT. 
+      
+      (multiply)
+      RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. EXP. LEFT. SELECT.
+      RIGHT. LOG. RIGHT. SELECT.
+      LEFT. 
+   LOG. RIGHT. SELECT.
+   LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+   RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+   END MAKE E
+   
+CLEAR. PRINT. RIGHT. 
+   
+   MAKE I:
+
+      MAKE -1:
+
+         MAKE 2:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 2
+         
+      RIGHT. 
+         
+         MAKE 1/2:
+         RIGHT. EXP. SELECT.
+         EXP. LEFT. SELECT.
+         RIGHT. LOG. LEFT. SELECT.
+         LOG. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         
+         END MAKE 1/2
+         
+      LOG. LEFT. SELECT.
+      RIGHT. 
+      END MAKE -1
+      
+   LEFT. EXP. RIGHT. SELECT.
+   EXP. LEFT. SELECT.
+   RIGHT. 
+   END MAKE I
+   
+CLEAR. PRINT. RIGHT. 
+   
+   MAKE TAU:
+
+      MAKE TAU/2:
+
+         MAKE TAU/4:
+
+            MAKE I:
+
+               MAKE -1:
+
+                  MAKE 2:
+                  EXP. SELECT.
+                  EXP. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. 
+                  END MAKE 2
+                  
+               RIGHT. 
+                  
+                  MAKE 1/2:
+                  RIGHT. EXP. SELECT.
+                  EXP. LEFT. SELECT.
+                  RIGHT. LOG. LEFT. SELECT.
+                  LOG. RIGHT. SELECT.
+                  EXP. LEFT. SELECT.
+                  
+                  END MAKE 1/2
+                  
+               LOG. LEFT. SELECT.
+               RIGHT. 
+               END MAKE -1
+               
+            LEFT. EXP. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            RIGHT. 
+            END MAKE I
+            
+         LOG. RIGHT. SELECT.
+
+            MAKE E:
+
+               MAKE 2:
+               EXP. SELECT.
+               EXP. RIGHT. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
+               LEFT. 
+               END MAKE 2
+               
+            RIGHT. 
+               
+               MAKE -1:
+
+                  MAKE 2:
+                  EXP. SELECT.
+                  EXP. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. 
+                  END MAKE 2
+                  
+               RIGHT. 
+                  
+                  MAKE 1/2:
+                  RIGHT. EXP. SELECT.
+                  EXP. LEFT. SELECT.
+                  RIGHT. LOG. LEFT. SELECT.
+                  LOG. RIGHT. SELECT.
+                  EXP. LEFT. SELECT.
+                  
+                  END MAKE 1/2
+                  
+               LOG. LEFT. SELECT.
+               RIGHT. 
+               END MAKE -1
+               
+            LEFT. LEFT. EXP. SELECT.
+            EXP. SELECT.
+            EXP. SELECT.
+            LOG. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. EXP. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. 
+               
+               (multiply)
+               RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+               RIGHT. RIGHT. EXP. LEFT. SELECT.
+               RIGHT. LOG. RIGHT. SELECT.
+               LEFT. 
+            LOG. RIGHT. SELECT.
+            LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+            END MAKE E
+            
+         LOG. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+
+            MAGNITUDE:
+            RIGHT. 
+               
+               MAKE 1/2:
+               RIGHT. EXP. SELECT.
+               EXP. LEFT. SELECT.
+               RIGHT. LOG. LEFT. SELECT.
+               LOG. RIGHT. SELECT.
+               EXP. LEFT. SELECT.
+               
+               END MAKE 1/2
+               
+            RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. CONJ. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. LEFT. 
+               
+               (multiply)
+               RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+               RIGHT. RIGHT. EXP. LEFT. SELECT.
+               RIGHT. LOG. RIGHT. SELECT.
+               LEFT. 
+            EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. 
+            END MAGNITUDE
+
+         END MAKE TAU/4
+         
+      RIGHT. 
+         
+         MAKE 2:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 2
+         
+      LEFT. 
+         
+         (multiply)
+         RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. SELECT.
+         RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+      
+      END MAKE TAU/2
+      
+   LEFT. 
+      
+      (multiply)
+      RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. EXP. LEFT. SELECT.
+      RIGHT. LOG. RIGHT. SELECT.
+      LEFT. 
+   
+   END MAKE TAU
+   
+PRINT. 
+Do a bunch of computation to delay the clearing of the last square.
+
+   MAKE TAU:
+
+      MAKE TAU/2:
+
+         MAKE TAU/4:
+
+            MAKE I:
+
+               MAKE -1:
+
+                  MAKE 2:
+                  EXP. SELECT.
+                  EXP. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. 
+                  END MAKE 2
+                  
+               RIGHT. 
+                  
+                  MAKE 1/2:
+                  RIGHT. EXP. SELECT.
+                  EXP. LEFT. SELECT.
+                  RIGHT. LOG. LEFT. SELECT.
+                  LOG. RIGHT. SELECT.
+                  EXP. LEFT. SELECT.
+                  
+                  END MAKE 1/2
+                  
+               LOG. LEFT. SELECT.
+               RIGHT. 
+               END MAKE -1
+               
+            LEFT. EXP. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            RIGHT. 
+            END MAKE I
+            
+         LOG. RIGHT. SELECT.
+
+            MAKE E:
+
+               MAKE 2:
+               EXP. SELECT.
+               EXP. RIGHT. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
+               LEFT. 
+               END MAKE 2
+               
+            RIGHT. 
+               
+               MAKE -1:
+
+                  MAKE 2:
+                  EXP. SELECT.
+                  EXP. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. LOG. RIGHT. SELECT.
+                  LEFT. 
+                  END MAKE 2
+                  
+               RIGHT. 
+                  
+                  MAKE 1/2:
+                  RIGHT. EXP. SELECT.
+                  EXP. LEFT. SELECT.
+                  RIGHT. LOG. LEFT. SELECT.
+                  LOG. RIGHT. SELECT.
+                  EXP. LEFT. SELECT.
+                  
+                  END MAKE 1/2
+                  
+               LOG. LEFT. SELECT.
+               RIGHT. 
+               END MAKE -1
+               
+            LEFT. LEFT. EXP. SELECT.
+            EXP. SELECT.
+            EXP. SELECT.
+            LOG. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. EXP. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. 
+               
+               (multiply)
+               RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+               RIGHT. RIGHT. EXP. LEFT. SELECT.
+               RIGHT. LOG. RIGHT. SELECT.
+               LEFT. 
+            LOG. RIGHT. SELECT.
+            LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+            END MAKE E
+            
+         LOG. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+
+            MAGNITUDE:
+            RIGHT. 
+               
+               MAKE 1/2:
+               RIGHT. EXP. SELECT.
+               EXP. LEFT. SELECT.
+               RIGHT. LOG. LEFT. SELECT.
+               LOG. RIGHT. SELECT.
+               EXP. LEFT. SELECT.
+               
+               END MAKE 1/2
+               
+            RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. CONJ. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. LEFT. 
+               
+               (multiply)
+               RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+               RIGHT. RIGHT. EXP. LEFT. SELECT.
+               RIGHT. LOG. RIGHT. SELECT.
+               LEFT. 
+            EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. 
+            END MAGNITUDE
+
+         END MAKE TAU/4
+         
+      RIGHT. 
+         
+         MAKE 2:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 2
+         
+      LEFT. 
+         
+         (multiply)
+         RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. SELECT.
+         RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+      
+      END MAKE TAU/2
+      
+   LEFT. 
+      
+      (multiply)
+      RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. EXP. LEFT. SELECT.
+      RIGHT. LOG. RIGHT. SELECT.
+      LEFT. 
+   
+   END MAKE TAU
+   
+CLEAR. 

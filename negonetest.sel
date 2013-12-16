@@ -1,0 +1,11 @@
+(5,5,30)
+
+      MAKE -1:
+      RIGHT. EXP. SELECT.
+      LEFT. LOG. RIGHT. SELECT.
+      EXP. LEFT. SELECT.
+      LOG. RIGHT. SELECT.
+      LEFT. 
+      END MAKE -1
+      
+   PRINT. 

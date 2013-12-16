@@ -1,0 +1,721 @@
+(101,101,1)
+
+   Draws a circle
+
+      LOOP 'circle' FROM 0 TO 400 BY INCREMENTS OF 1
+
+         MAKE 2:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 2
+         
+      RIGHT. 
+         
+         MAKE -1:
+         RIGHT. EXP. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         
+         MARK AS makenumsign
+         LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE -1
+         
+      RIGHT. 
+         
+         MAKE I:
+
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 2
+            
+         RIGHT. 
+            
+            MAKE -1:
+            RIGHT. EXP. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            
+            MARK AS makenumsign
+            LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE -1
+            
+         LEFT. EXP. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         RIGHT. 
+         END MAKE I
+
+         ADD:
+         RIGHT. EXP. LEFT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+         LOG. RIGHT. SELECT.
+         LEFT. 
+         END ADD
+         
+      LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. EXP. RIGHT. RIGHT. SELECT.
+      LEFT. LEFT. EXP. RIGHT. SELECT.
+      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+         
+         (multiply)
+         RIGHT. EXP. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+      
+      MARK AS circlesentinel
+      RIGHT. 
+         
+         MAKE -1:
+         RIGHT. EXP. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         
+         MARK AS makenumsign
+         LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE -1
+         
+      RIGHT. 
+         
+         MAKE 400:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 400
+         
+      EXP. LEFT. SELECT.
+      RIGHT. RIGHT. 
+         
+         MAKE I:
+
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 2
+            
+         RIGHT. 
+            
+            MAKE -1:
+            RIGHT. EXP. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            
+            MARK AS makenumsign
+            LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE -1
+            
+         LEFT. EXP. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         RIGHT. 
+         END MAKE I
+         
+      EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. 
+         
+         (multiply)
+         RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. SELECT.
+         RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+      
+      MARK AS circlestep
+      RIGHT. 
+      FETCH circlesentinel
+      EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+      LEFT. 
+      circlesentinel FETCHED
+      
+      MARK AS circlesentinel
+      LOOP. 
+
+            MAGNITUDE:
+            
+            MARK AS absvalarg
+            RIGHT. 
+               
+               MAKE 1/2:
+               RIGHT. EXP. SELECT.
+               EXP. LEFT. SELECT.
+               RIGHT. LOG. LEFT. SELECT.
+               LOG. RIGHT. SELECT.
+               EXP. LEFT. SELECT.
+               
+               END MAKE 1/2
+               
+            RIGHT. 
+            FETCH absvalarg
+            EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+            absvalarg FETCHED
+            CONJ. RIGHT. 
+            FETCH absvalarg
+            EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+            absvalarg FETCHED
+            LEFT. 
+               
+               (multiply)
+               RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+               RIGHT. RIGHT. EXP. LEFT. SELECT.
+               RIGHT. LOG. RIGHT. SELECT.
+               LEFT. 
+            EXP. LEFT. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. RIGHT. 
+            END MAGNITUDE
+            
+         LOG. RIGHT. SELECT.
+         LEFT. RIGHT. 
+            
+            MAKE 4:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 4
+            
+         RIGHT. 
+            
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 2
+            
+         RIGHT. 
+            
+            MAKE -1:
+            RIGHT. EXP. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            
+            MARK AS makenumsign
+            LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE -1
+            
+         RIGHT. EXP. LEFT. SELECT.
+         RIGHT. RIGHT. 
+         FETCH circlestep
+         EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+         circlestep FETCHED
+         LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+         EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+            
+            MAKE 5:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 5
+            
+         RIGHT. 
+            
+            MAKE 5:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 5
+            
+         LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+         RIGHT. 
+            
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 2
+            
+         LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+         PRINT. RIGHT. 
+         FETCH circlesentinel
+         EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+         circlesentinel FETCHED
+         RIGHT. 
+         FETCH circlestep
+         EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+         circlestep FETCHED
+         LEFT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+         
+      END. 
+      END OF LOOP circle
+      
+   

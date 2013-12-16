@@ -1,0 +1,143 @@
+(5,5,30)
+
+   Outputs ln(-1-2i)
+
+      MAKE -1+-2I:
+
+         MAKE 2:
+         EXP. SELECT.
+         EXP. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         LEFT. 
+         END MAKE 2
+         
+      RIGHT. 
+         
+         MAKE I:
+
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 2
+            
+         RIGHT. 
+            
+            MAKE -1:
+            RIGHT. EXP. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            
+            MARK AS makenumsign
+            LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE -1
+            
+         LEFT. EXP. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         RIGHT. 
+         END MAKE I
+         
+      RIGHT. EXP. LEFT. SELECT.
+      RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. 
+      MARK AS makenumimagpart
+      RIGHT. RIGHT. EXP. SELECT.
+      LEFT. LOG. RIGHT. SELECT.
+      EXP. LEFT. SELECT.
+      
+      MARK AS makenumsign
+      LOG. RIGHT. SELECT.
+      EXP. SELECT.
+      EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. LOG. RIGHT. SELECT.
+      LEFT. EXP. LEFT. SELECT.
+      RIGHT. LOG. RIGHT. SELECT.
+      LEFT. 
+      END MAKE -1+-2I
+
+      NATURAL LOG:
+      RIGHT. EXP. LEFT. SELECT.
+      RIGHT. LOG. RIGHT. SELECT.
+      LEFT. LOG. RIGHT. SELECT.
+
+         MAKE E:
+
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 2
+            
+         RIGHT. 
+            
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE 2
+            
+         RIGHT. 
+            
+            MAKE -1:
+            RIGHT. EXP. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            
+            MARK AS makenumsign
+            LOG. RIGHT. SELECT.
+            LEFT. 
+            END MAKE -1
+            
+         LEFT. LEFT. EXP. SELECT.
+         EXP. SELECT.
+         EXP. SELECT.
+         LOG. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. EXP. LEFT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. SELECT.
+         RIGHT. 
+            
+            (multiply)
+            RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
+            RIGHT. RIGHT. EXP. LEFT. SELECT.
+            RIGHT. LOG. RIGHT. SELECT.
+            LEFT. 
+         LOG. RIGHT. SELECT.
+         LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+         END MAKE E
+         
+      LOG. RIGHT. SELECT.
+      LEFT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. RIGHT. 
+         
+         (multiply)
+         RIGHT. EXP. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+      
+      END NATURAL LOG
+      
+   PRINT. 
+######GENERATION CODE######
+
+init(5,5,30)
+comment('Outputs ln(-1-2i)')
+makenum(-1,-2)
+ln()
+output()
+writetofile('lntest')
+

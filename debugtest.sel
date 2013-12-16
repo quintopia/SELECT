@@ -1,0 +1,13 @@
+(5,5,30)
+
+Test select.py's debug output
+LOG. SELECT.
+LOG. SELECT.
+PRINT. 
+######GENERATION CODE######
+init(5,5,30)
+comment('Test select.py\'s debug output')
+makeone()
+logtarget(0)
+output()
+writetofile('debugtest')

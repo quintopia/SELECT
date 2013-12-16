@@ -1,0 +1,22 @@
+(5,13,20)
+LOG. SELECT.
+LOG. RIGHT. SELECT.
+LEFT. 
+   
+   WHILE
+   LOOP. RIGHT. GET. COLOR. PRINT. LEFT. END. 
+   END WHILE
+   
+
+######GENERATION CODE######
+init(5,13,20)
+makezero()
+repeat()
+go(1)
+input()
+color()
+output()
+go(-1)
+endrepeat()
+writetofile('cat')
+
