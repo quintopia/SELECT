@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#SELECT. Code Generator v0.2 by Quintopia
+#SELECT. Code Generator v0.3 by Quintopia
 # All code-generating functions in this file are right-growing, meaning they make the following guarantees:
 # * They do not read or write cells to the left of the current cell at call time.
 # * The result that the algorithm computes will be contained in the rightmost cell clobbered by the algorithm.
@@ -25,9 +25,8 @@ condpad = {}
 offset = 0
 dike = False
 
-
 letterforms = {' ':[],
-               '!':[(0,-4),(0,-3),(0,-2),(0,-1),(0,1)],
+               '!':[(0,-4),(0,-3),(0,-2),(0,-1),(0,0),(0,2)],
                '"':[(1,-4),(1,-3),(-1,-4),(-1,-3)],
                '#':[(0,-4),(2,-4),(-1,-3),(1,-3),(-2,-2),(-1,-2),(0,-2),(1,-2),(2,-2),(3,-2),(-1,-1),(1,-1),(2,0),(1,0),(0,0),(-1,0),(-2,0),(-3,0),(1,1),(-1,1),(0,2),(-2,2),(0,3),(-2,3)],
                '$':[(0,-4),(0,-3),(1,-3),(2,-3),(2,-3),(-1,-3),(-2,-2),(-2,-1),(-1,-1),(0,-2),(0,-1),(0,0),(1,0),(2,0),(2,1),(1,2),(0,1),(0,2),(0,3),(-1,2),(-2,2)],
@@ -58,68 +57,68 @@ letterforms = {' ':[],
                '>':[(-2,-2),(-2,1),(-1,-2),(-1,1),(0,-1),(0,0),(1,-1),(1,0),(2,-1),(2,0),],
                '?':[(-2,-4),(-1,-4),(0,-4),(1,-3),(0,-2),(-1,-1),(-1,0),(-1,0),(-1,2),],
                '@':[(-1,-3),(0,-3),(-2,-2),(1,-2),(-2,-1),(1,-1),(0,-1),(-2,0),(0,0),(1,0),(0,1),(1,1),(-2,1),(-2,2),(-1,2),(-1,3),(0,3),],
-               'A':[],
-               'B':[],
-               'C':[],
-               'D':[],
-               'E':[],
-               'F':[],
-               'G':[],
-               'H':[],
-               'I':[],
-               'J':[],
-               'K':[],
-               'L':[],
-               'M':[],
-               'N':[],
-               'O':[],
-               'P':[],
-               'Q':[],
-               'R':[],
-               'S':[],
-               'T':[],
-               'U':[],
-               'V':[],
-               'W':[],
-               'X':[],
-               'Y':[],
-               'Z':[],
-               '[':[],
-               '\\':[],
-               ']':[],
-               '^':[],
-               '_':[],
-               '`':[],
-               'a':[],
-               'b':[],
-               'c':[],
-               'd':[],
-               'e':[],
-               'f':[],
-               'g':[],
-               'h':[],
-               'i':[],
-               'j':[],
-               'k':[],
-               'l':[],
-               'm':[],
-               'n':[],
-               'o':[],
-               'p':[],
-               'q':[],
-               'r':[],
-               's':[],
-               't':[],
-               'u':[],
-               'v':[],
-               'w':[],
-               'x':[],
-               'y':[],
-               'z':[],
-               '{':[],
-               '|':[],
-               '}':[],
-               '~':[],
+               'A':[(-1,-4),(0,-4),(-1,-3),(0,-3),(-2,-2),(1,-2),(-2,-1),(1,-1),(-2,0),(1,0),(-2,1),(-1,1),(0,1),(1,1),(1,2),(-2,2),],
+               'B':[(-2,-4),(-1,-4),(0,-4),(1,-3),(-2,-3),(-2,-2),(1,-2),(-2,-1),(-1,-1),(0,-1),(1,0),(1,1),(-2,0),(-2,1),(-2,2),(-1,2),(0,2),],
+               'C':[(-1,-4),(0,-4),(0,-4),(1,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,2),],
+               'D':[(-2,-4),(-1,-4),(0,-4),(1,-3),(1,-2),(1,-1),(1,0),(1,1),(0,2),(-1,2),(-2,2),(-2,1),(-2,0),(-2,-1),(-2,-2),(-2,-3),],
+               'E':[(-2,-4),(-1,-4),(0,-4),(1,-4),(-2,-3),(-2,-2),(-2,-1),(-1,-1),(0,-1),(1,-1),(-2,0),(-2,1),(-2,2),(-1,2),(0,2),(1,2),],
+               'F':[(-2,-4),(-1,-4),(0,-4),(1,-4),(-2,-3),(-2,-2),(-2,-1),(-1,-1),(0,-1),(1,-1),(-2,0),(-2,1),(-2,2),],
+               'G':[(-1,-4),(0,-4),(1,-4),(-2,-3),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,2),(1,1),(1,0),(1,-1),(0,-1)],
+               'H':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-1),(0,-1),(1,-1),(1,0),(1,1),(1,2),(1,-2),(1,-3),(1,-4),],
+               'I':[(-2,-4),(-1,-4),(0,-4),(-1,-3),(-1,-2),(-1,-1),(-1,0),(-1,1),(-2,2),(-1,2),(0,2),],
+               'J':[(-1,-4),(0,-4),(1,-4),(1,-3),(1,-2),(1,-1),(1,0),(1,1),(0,2),(-1,2),(-2,2),],
+               'K':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(1,-4),(0,-3),(-1,-2),(-1,-1),(0,0),(0,1),(1,2),],
+               'L':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,2),(0,2),(1,2),],
+               'M':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-3),(0,-3),(1,-4),(1,-3),(1,-2),(1,-1),(1,0),(1,1),(1,2),(-1,0),(0,0),(0,-1),(-1,-1),(-1,-2),(0,-2),],
+               'N':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-3),(-1,-2),(-1,-1),(0,-1),(1,-4),(1,-3),(1,-2),(1,-1),(1,0),(1,1),(1,2),(0,0),(0,1),],
+               'O':[(-1,-4),(0,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,-3),(1,-2),(1,-1),(1,0),(1,1),],
+               'P':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-4),(-1,-4),(-1,-1),(0,-4),(0,-1),(1,-3),(1,-2),],
+               'Q':[(-1,-4),(0,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,-3),(1,-2),(1,-1),(1,0),(1,1),(0,3),(1,3),],
+               'R':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-4),(0,-4),(1,-3),(1,-2),(0,-1),(-1,-1),(0,0),(1,1),(1,2),],
+               'S':[(-1,-4),(0,-4),(1,-3),(-2,-3),(-2,-2),(-1,-1),(0,-1),(1,0),(1,1),(0,2),(-1,2),(-2,1),],
+               'T':[(-3,-4),(-2,-4),(-1,-4),(0,-4),(1,-4),(-1,-3),(-1,-2),(-1,-1),(-1,0),(-1,1),(-1,2),],
+               'U':[(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,1),(1,0),(1,-1),(1,-2),(1,-3),(1,-4),],
+               'V':[(-2,-4),(-2,-3),(-2,-2),(-1,-1),(-1,-1),(-1,0),(-1,1),(-1,2),(0,2),(0,1),(0,0),(0,-1),(1,-2),(1,-3),(1,-4),],
+               'W':[(-3,-4),(-3,-3),(-3,-2),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-2),(-1,-1),(0,-2),(0,-1),(0,0),(0,1),(0,2),(1,-4),(1,-3),(1,-2),],
+               'X':[(-2,-4),(-2,-3),(-2,1),(-2,2),(-1,-2),(-1,-1),(-1,0),(0,-2),(0,-1),(0,0),(1,1),(1,2),(1,-4),(1,-3),],
+               'Y':[(-3,-4),(-2,-3),(-2,-2),(-1,-2),(0,-2),(0,-3),(1,-4),(-1,-1),(-1,0),(-1,1),(-1,2),],
+               'Z':[(-2,-4),(-1,-4),(0,-4),(1,-4),(1,-3),(0,-2),(0,-1),(-1,0),(-2,1),(-2,2),(-1,2),(0,2),(1,2),(-1,-1),],
+               '[':[(-1,-5),(0,-5),(-1,-4),(-1,-3),(-1,-2),(-1,-1),(-1,0),(-1,1),(-1,2),(0,2),],
+               '\\':[(-3,-4),(-2,-3),(-2,-2),(-1,-1),(-1,0),(0,1),(0,2),],
+               ']':[(-2,-5),(-1,-5),(-1,-4),(-1,-3),(-1,-2),(-1,-1),(-1,0),(-1,1),(-1,2),(-2,2),],
+               '^':[(-2,-3),(-1,-4),(0,-5),(1,-4),(1,-4),(2,-3),],
+               '_':[(-3,4),(-2,4),(-1,4),(0,4),(1,4),],
+               '`':[(-2,-5),(-1,-4),],
+               'a':[(-2,-2),(-1,-2),(0,-2),(1,-1),(1,0),(1,1),(1,2),(0,2),(-1,2),(-2,1),(-1,0),(0,0),],
+               'b':[(-2,-5),(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-2),(-1,2),(0,-2),(0,2),(1,-1),(1,0),(1,1),],
+               'c':[(-1,-2),(0,-2),(1,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,2),],
+               'd':[(1,-5),(1,-4),(1,-3),(1,-2),(1,-1),(1,0),(1,1),(1,2),(0,-2),(0,2),(-1,-2),(-1,2),(-2,-1),(-2,0),(-2,1),],
+               'e':[(-1,-2),(0,-2),(-2,-1),(1,-1),(-2,0),(-1,0),(0,0),(1,0),(-2,1),(-1,2),(0,2),(1,2),],
+               'f':[(0,-5),(1,-5),(-1,-4),(-1,-3),(-1,-2),(-2,-2),(0,-2),(1,-2),(-1,-1),(-1,0),(-1,1),(-1,2),],
+               'g':[(-1,-2),(0,-2),(1,-2),(-2,-1),(1,-1),(-2,0),(1,0),(-2,1),(1,1),(-1,2),(0,2),(1,2),(1,3),(0,4),(-1,4),],
+               'h':[(-2,-5),(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-2),(0,-2),(1,-1),(1,0),(1,1),(1,2),],
+               'i':[(-1,-5),(-1,-2),(-2,-2),(-1,-1),(-1,0),(-1,1),(-1,2),(-2,2),(-3,2),(0,2),(1,2),],
+               'j':[(0,-5),(-1,-2),(-1,-2),(0,-2),(0,-1),(0,0),(0,1),(0,2),(0,3),(-1,4),(-1,4),(-2,4),],
+               'k':[(-2,-5),(-2,-4),(-2,-3),(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,0),(0,-1),(1,-2),(0,1),(1,2),],
+               'l':[(-3,-5),(-2,-5),(-1,-5),(-1,-4),(-1,-3),(-1,-2),(-1,-1),(-1,0),(-1,1),(0,2),(1,2),],
+               'm':[(-2,-2),(-1,-2),(0,-2),(1,-2),(-2,-1),(-2,-1),(-2,0),(-2,1),(-2,2),(0,-1),(0,0),(0,1),(0,2),(2,-1),(2,0),(2,1),(2,2),],
+               'n':[(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-1,-2),(0,-2),(1,-1),(1,0),(1,1),(1,2),],
+               'o':[(-1,-2),(0,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,-1),(1,0),(1,1),],
+               'p':[(-2,-2),(-2,-1),(-2,0),(-2,1),(-2,2),(-2,3),(-2,4),(-1,-2),(0,-2),(1,-1),(1,0),(1,1),(0,2),(-1,2),],
+               'q':[(-1,-2),(0,-2),(1,-2),(-2,-1),(-2,0),(-2,1),(-1,2),(0,2),(1,-1),(1,0),(1,1),(1,2),(1,3),(1,4),],
+               'r':[(-1,-2),(0,-2),(1,-2),(-1,-1),(-1,0),(-1,1),(-1,2),],
+               's':[(-1,-2),(0,-2),(1,-2),(-2,-1),(-1,0),(0,0),(1,1),(0,2),(-1,2),(-2,2),],
+               't':[(-1,-3),(-2,-2),(-1,-2),(0,-2),(1,-2),(-1,-1),(-1,0),(-1,1),(0,2),(1,2),],
+               'u':[(-2,-2),(-2,-1),(-2,0),(-2,1),(1,-2),(1,-1),(1,0),(1,1),(-1,2),(0,2),(1,2),],
+               'v':[(-2,-2),(-2,-1),(-2,0),(-1,1),(-1,2),(0,2),(0,1),(1,0),(1,-1),(1,-2),],
+               'w':[(-3,-2),(-3,-1),(-3,0),(-2,1),(-2,2),(-1,0),(-1,-1),(0,1),(0,2),(1,0),(1,-1),(1,-2),],
+               'x':[(-2,-2),(-2,2),(-1,-1),(-1,0),(-1,1),(1,-2),(1,2),(0,-1),(0,0),(0,1),],
+               'y':[(-2,-2),(-2,-1),(1,-2),(1,-1),(-1,0),(0,0),(0,1),(-1,1),(-1,2),(-1,3),(-2,4),],
+               'z':[(-2,-2),(-1,-2),(0,-2),(1,-2),(0,-1),(-1,0),(-1,1),(-2,2),(-1,2),(0,2),(1,2),],
+               '{':[(-1,-5),(0,-5),(-1,-4),(-1,-3),(-1,-2),(-1,-2),(-2,-1),(-1,0),(-1,1),(-1,2),(0,2),],
+               '|':[(-1,-5),(-1,-4),(-1,-3),(-1,-2),(-1,-1),(-1,0),(-1,1),(-1,2),(-1,3),],
+               '}':[(-2,-5),(-1,-5),(-1,-4),(-1,-3),(-1,-2),(0,-1),(-1,0),(-1,1),(-1,2),(-2,2),],
+               '~':[(-2,-1),(-1,-2),(0,-2),(1,-1),(2,-2),],
 }
 
 
@@ -146,6 +145,7 @@ def writetofile(filename):
         
     s = sub('\n\s*?\n\s*?\n','\n\n',s)
     s = sub('\*%(?P<comment>.*)%\*','\g<comment>',s)
+    s = sub('\n\n','\n \n',s) #so we can post these to the wiki easily
     
     s+='\n######GENERATION CODE######'+code+'\n'
     
@@ -292,7 +292,7 @@ def drawString(string,x,y,top=0,bottom=None,left=0,right=None):
             continue
         remainder = string.find(' ',i+1)-i
         nextword = string.find(' ',i+remainder+1)-remainder
-        if x>right || c=='\n' || (x+5*remainder>right && remainder*5<right-left && nextword*5<right-left):  #reset to left side if we're off the right side (from tabbing) or at newline or will not see whitespace before we hit the right side unless the next word is longer than a line
+        if x>right or c=='\n' or (x+5*remainder>right and remainder*5<right-left and nextword*5<right-left):  #reset to left side if we're off the right side (from tabbing) or at newline or will not see whitespace before we hit the right side unless the next word is longer than a line
             y=y+12
             x=left
             if c=='\n':                             #go on to next character if it was a newline, otherwise try to print current char
@@ -316,7 +316,7 @@ def drawLetterXY(c,x,y):
         makenum(x+n[0]+3,y+n[1]+6)
         output()
         go(1)
-    comment('END DRAW LETTER')
+    comment('END DRAW LETTER "'+c+'"')
     downindent()
 
 
@@ -442,7 +442,7 @@ def halt():
     global s,dike
     if dike:
         return
-        s+='HALT. \n!!!!END OF PROGRAM!!!!\n'
+        s+='HALT. \n!!!!PROGRAM EXIT POINT!!!!\n'
 
 
 
@@ -450,14 +450,13 @@ def halt():
 
 
 ################################################LOOPING############################################
-#TODO: Add a loop that takes its arguments from the tape. it will be identical to this one but it won't write the input numbers to the tape
-#TODO: Let loops take an optional list of variables to be fetched and placed immediately before the step and sentinel at LOOP and END so that some cells can be "carried along" with a loop.
-#TODO: Add a while loop with the auto-fetching feature too.
-def loop(name,start,end,step=1,computei=False):
+#TODO: Test loops with their counts stored on tape.
+#TODO: Test (bounded and simple) loops with the auto-fetching savelist
+def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
     global s,dike
     if dike:
         return
-    #input: (k) k k k k k k k k k k k k k k k k k k k {k k k k {k k} {k k k k {k k k}}} (20,24/26,28/30,31/33)k's
+    #input: [(k) | (x) k] k k k k k k k k k k k k k k k k k k k {k k k k {k k} {k k k k {k k k}}} (20,24/26,28/30,31/33)k's
     #output: 1/sqrt(2) -1 1/2 i -1 k^i k^-1 -1+i (-1+i)/sqrt(2) -1 1/n 1/2 i^(1/(2n)) k k*i^(1/(2n)) (sentinel) {k}...
           #... 1/2 sentinel* sentinel ...                                                               computei=True and...  
             #... (i) k                                                                                  ...step=1 or
@@ -467,7 +466,11 @@ def loop(name,start,end,step=1,computei=False):
           #... loopcount*step -1 -start start loopcount*step k^start k^loopcount*step (i) k           ...start<0
     #also creates the variables <name>sentinel, <name>step, used internally.
     upindent()
-    comment("LOOP '"+name+"' FROM "+str(start)+" TO "+str(end)+" BY INCREMENTS OF "+str(step))
+    if end is None:
+        comment("LOOP '"+name+"' FROM 0 TO VALUE ON TAPE BY INCREMENTS OF 1")
+        go(1)
+    else:
+        comment("LOOP '"+name+"' FROM "+str(start)+" TO "+str(end)+" BY INCREMENTS OF "+str(step))
     makenum(2)
     right(1)
     makeneg1()
@@ -488,7 +491,10 @@ def loop(name,start,end,step=1,computei=False):
     go(1)
     makeneg1()
     go(1)
-    makenum((end-start)/step)
+    if end is None:
+        copyFrom(-10)
+    else:
+        makenum((end-start)/step)
     #...-1 (n) k
     exptarget(-1)
     go(2)
@@ -500,6 +506,15 @@ def loop(name,start,end,step=1,computei=False):
     multiply()
     var(name+'step')
     #...-1 1/n 1/2 i^(1/(2n)) k (k*i^(1/(2n))) k
+    if savelist is not None:
+        go(1)
+        for varname in savelist:
+            fetch(varname)
+            var(varname)
+            go(1)
+        go(1) #leave a gap for where the old sentinel will be fetched in endloop
+        fetch(name+'step')
+        var(name+'step')
     go(1)
     fetch(name+'sentinel')
     var(name+'sentinel')
@@ -536,7 +551,7 @@ def loop(name,start,end,step=1,computei=False):
             #...loopcount {step loopcount*step} 2 -1 -start start loopcount*step k^start k^loopcount*step (i) sentinel step i k
     #do not down indent. that is in endloop()
     
-def endloop(name,computei=False,start=0):
+def endloop(name,computei=False,start=0,savelist=None):
     global s,dike
     if dike:
         return
@@ -546,6 +561,11 @@ def endloop(name,computei=False,start=0):
        #...(i) k                                                                            ...start=0
        #...loopcount*step start k^(loopcount*step) k^start (i) k                            ...start>0
        #...loopcount*step 2 -1 -start start loopcount*step k^start k^loopcount*step (i) k   ...start<0
+    if savelist is not None:
+        for varname in savelist:
+            fetch(varname)
+            var(varname)
+            go(1)
     fetch(name+'sentinel')
     go(1)
     fetch(name+'step')
@@ -582,18 +602,34 @@ def endloop(name,computei=False,start=0):
     comment('END OF LOOP '+name)
     downindent()
 
-def repeat():
+def repeat(savelist=None):
     global s,dike
     if dike:
         return
     upindent()
     comment("WHILE")
+    if savelist is not None:
+        var("repeatsentinel")
+        go(1)
+        for varname in savelist:
+            fetch(varname)
+            var(varname)
+            go(1)
+        fetch("repeatsentinel")
     s+="LOOP. "
 
-def endrepeat():
+def endrepeat(savelist=None):
     global s,dike
     if dike:
         return
+    if savelist is not None:
+        var("repeatsentinel")
+        go(1)
+        for varname in savelist:
+            fetch(varname)
+            var(varname)
+            go(1)
+        fetch("repeatsentinel")
     s+="END. "
     comment("END WHILE")
     downindent()
@@ -782,15 +818,18 @@ def makenum(real=0,imag=0):
     if real==0:
         if imag==0:
             makezero()
+            downindent()
             return
         else:
             go(-1)
             logtarget(1)
             go(-1)
+            downindent()
             return
     if real==1:
         if imag==0:
             makeone()
+            downindent()
             return
     if real<0:
         upindent()
@@ -809,7 +848,6 @@ def makenum(real=0,imag=0):
         sign=-1
         real=-real
     if real>1 or (real==1 and imag!=0):
-        upindent()
         exptarget(0)
         i=0
         while i<real-1:
@@ -830,7 +868,6 @@ def makenum(real=0,imag=0):
             go(-shift) 
         logtarget(1)
         left(1)
-        downindent()
     real=sign*real
     if real==-1 and imag==0:
         go(-1)
