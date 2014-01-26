@@ -8,51 +8,41 @@ import sys,os
 import re,random
 from collections import deque
 from itertools import islice
+import optparse
 
+myname = "SELECT. interpreter v0.3"
 #create a Tk instance
 master = Tk()
 master.resizable(width = False, height = False)
-master.title('SELECT. interpreter v0.2')
+master.title(myname)
 
-#get filename from input line and read in file
-if len(sys.argv)<2:
-    print("SELECT. interpreter v0.25 by Quintopia\nUsage: python select [-v] <filename> [p=<precision>] [v=<defaultvalue>]\n"+
-          "Language by Por gammer, spec at http://esolangs.org/wiki/SELECT.\nDefault precision is 15 decimal digits.")
-    sys.exit()
-ash = 1
-verbose = False
-if sys.argv[1]=='-v':
-    verbose = True
-    ash+=1
+parser = optparse.OptionParser(description=myname+" by Quintopia. SELECT. Language by Por Gammer.", usage="%prog [options] <filename>")
+parser.add_option('-v', '--verbose', help="Turn on verbose output.", dest="verbose", action="store_true", default=False)
+parser.add_option('-k', help="Set the tape initialization value.", metavar="<value>", action="store", dest="val", type=float, default=1)
+parser.add_option('-p', help="Set the precision of arithmetic.", metavar="<value>", action="store", dest="precision", type=int, default=100)
+(options, args) = parser.parse_args()
+#open and load file
+if len(args)<1:
+    parser.error('Please specify the filename of the SELECT. program to be run.')
+filename = args[0]
 try:
-    openfile = file(sys.argv[ash],"r")
+    openfile = open(filename,"r")
 except IOError:
-    print("File not found.")
+    print("File '"+filename+"' not found.")
     sys.exit()
 else:
     theFile = openfile.read()
     origFile=theFile
     openfile.close()
 #set precision and default value
-mpmath.mp.dps = 100                  #you pretty much can't do anything with out major rounding bugs with a precision less than 100.
-                                     #for apps without big numbers you can get speed by lowering this to a much lower value (15) and using a shorter default value (1.0001)
-val = 0
-if len(sys.argv)>ash+1:
-    if sys.argv[ash+1].startswith('v='):
-        val = mpmath.mpmathify(sys.argv[ash+1][2:])
-    if sys.argv[ash+1].startswith('p='):
-        mpmath.mp.dps=int(sys.argv[ash+1][2:])
-if len(sys.argv)>ash+2:
-    if sys.argv[ash+2].startswith('v='):
-        val = mpmath.mpmathify(sys.argv[ash+2][2:])
-    if sys.argv[ash+2].startswith('p='):
-        mpmath.mp.dps=int(sys.argv[ash+2][2:])
-
-    
 #pick a random fill value (very close to 1 to protect against rounding errors when doing things like k^(k^n) )
-if val==0:
+if options.val==1:
     val = mpmath.mpf(random.uniform(1,1.0000001))
-    
+else:
+    val = mpmath.mpmathify(args['val'])
+
+mpmath.mp.dps=options.precision
+verbose=options.verbose
 if verbose:
     print("Using tape value: "+mpmath.nstr(val))
 
@@ -268,7 +258,7 @@ def drawbox():
     if (x,y) in pixdict:
         canv.delete(pixdict[(x,y)])
         del pixdict[(x,y)]
-    pixdict[(x,y)] = canv.create_rectangle(x*z-z,y*z-z,x*z,y*z,fill=rgb(red,green,blue),width=0)
+    pixdict[(x,y)] = canv.create_rectangle(x*z-z+1,y*z-z+1,x*z+1,y*z+1,fill=rgb(red,green,blue),width=0)
 def deletepix():
     global pixdict,canv
     canv.delete(ALL)
