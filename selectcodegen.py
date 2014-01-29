@@ -12,6 +12,8 @@
 # To use a left-growing algorithm instead, use leftgr(). 
 # E.g.: leftgr(add) writes out a left-growing addition algorithm with the sum leftmost
 
+#TODO: test padded conditionals, arg
+
 
 from re import sub,DOTALL
 import sys
@@ -21,7 +23,6 @@ h=0
 w=0
 indentlevel=0
 vardict = {}
-condpad = {}
 offset = 0
 dike = False
 
@@ -434,15 +435,21 @@ def fetch(name):
     #vardict[name] = offset
     comment(name+" FETCHED")
 
+#return how far we have to go() to get to the named position, unless no position is named, in which case return absolute position
 def getoffset(name=None):
     global vardict,offset
+    if name is None:
+        return offset
+    if name not in vardict:
+        print("No location called '"+name+"' exists.")
+        sys.exit(1)
     return vardict[name]-offset
 
 def halt():
     global s,dike
     if dike:
         return
-        s+='HALT. \n!!!!PROGRAM EXIT POINT!!!!\n'
+    s+='HALT. \n!!!!PROGRAM EXIT POINT!!!!\n'
 
 
 
@@ -515,6 +522,10 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
         go(1) #leave a gap for where the old sentinel will be fetched in endloop
         fetch(name+'step')
         var(name+'step')
+    #invalidate all variables which are not being saved (as looping will make their offsets wrong anyway)
+    for key in savelist:
+        if key not in savelist and key!=name+'step' and key!=name+'sentinel':
+            del vardict[key]
     go(1)
     fetch(name+'sentinel')
     var(name+'sentinel')
@@ -641,38 +652,43 @@ def endrepeat(savelist=None):
 
 
 ##############################################CONDITIONALS##################################################
-def ifnonpositive(name='unnamed'):
+def ifnonpositive(name):
     global s,dike
     if dike:
         return
     #x must be a real number!
     #input: (x) ?
-    #output: (x) ? or x (?)
+    #output: (x) ?
     upindent()
     comment('IF ('+name+'):')
     s+='LOOP. '
     var('ifstart'+name)
     upindent()
-    go(1)
     #no downindent
     
 def ifzero(name):
     global dike
-    #input (x) k k k k
-    #output: x 1/2 x* |x| (k)
+    #input (x) k k k k k
+    #output: x 1/2 x* |x| (x) k
     if dike:
         return
     comment('IF ZERO ('+name+'):')
     absval()
     ifnonpositive(name)
-#TODO: make it mark the spot just before the END in the file and be able to insert LEFT. or RIGHT. enough times to line up the tape usage. also globally record the offset at this moment.
-def els(name):
-    global s,dike
+    go(1)
+    copyfrom(-4)
+    
+def els(name,copy=True):
+    global s,dike,offset
     if dike:
         return
-    #input: (x|?) k k k
-    #output: x k 0 (k)
-    go(2)
+    #input: (x|?) k k k k
+    #output: x k 0 (x) k
+    if s.rfind('PADPOINT1'+name)<0:
+        padpoint1(name)
+    go(1)
+    var('ifone'+name)
+    go(1)
     makezero()
     go(-1)
     downindent()
@@ -681,33 +697,45 @@ def els(name):
     lnot()
     comment('ELSE ('+name+'):')
     s+='LOOP. '
+    #THE OFFSET HERE WOULD BE THE SAME AS THE OFFSET AT THE BEGINNING OF THE FIRST IF BLOCK PLUS 2 (since only one of the two will be executed)
+    offset+=getoffset('ifstart'+name)+2
     var('ifelse'+name)
     upindent()
-    go(1)
+    if copy:
+        go(1)
+        copyfrom(-2)
 
-#TODO: check the offset difference between branches and insert RIGHT. or LEFT. before the end (or before the else's end) to line up tape usage.
-#TODO: automatically insert an else 
-def endif(name='unnamed'):
-    global s,dike
+def endif(name):
+    global s,dike,vardict,offset
     if dike:
         return
     #input: (x) k
-    #output: x (k) 
-    # or
-    #output: x k (k)
-    if name+'first' in condpad:
-        b1length = getoffset(name+'first')-getoffset('ifstart'+name)
-        if name+'second' in condpad:
-            #calculate offset between padpoint1 and padpoint2
-            b2length = getoffset(name+'second')-getoffset('ifelse'+name)
-            padlength = b2length-b1length
-            #insert rights or lefts in padpoint2
+    #output: (x) k 
+    #if an else branch wasn't needed for program logic but the tapehead moved, insert one anyway just to prevent tape usage differing depending on conditional result
+    if 'ifelse'+name not in vardict and getoffset('ifstart'+name)!=0:
+        els(name,False)
+    #no padding necessary if there is no else block and the tape head did not move
+    if 'ifelse'+name in vardict:
+        #calculate displacement of first branch
+        b1length = getoffset('ifone'+name)-getoffset('ifstart'+name)
+        if s.rfind('PADPOINT2'+name)<0:
+            padpoint2(name)
+        go(1)
+        #calculate displacement of second branch
+        b2length = -getoffset('ifelse'+name)
+        #output rights
+        if b2length>b1length:
+            #this branch is further right. insert rights at padpoint1
+            padlength=b2length-b1length
+            offset+=padlength
+            s=s.replace('PADPOINT1'+name,'({'+'RIGHT. '*padlength+'})')
+            s=s.replace('PADPOINT2'+name,'')
         else:
-            b2length = getoffset()-getoffset('ifelse'+name)
-            padlength = b2length-b1length
-            go(-padlength)
-            #insert rights or lefts right here
-    go(1)
+            #insert rights at padpoint2
+            padlength=b1length-b2length
+            offset+=padlength
+            s=s.replace('PADPOINT2'+name,'({ '+'RIGHT. '*padlength+'}) ')
+            s=s.replace('PADPOINT1'+name,'')
     downindent()
     s+='END. '
     go(1)
@@ -715,20 +743,24 @@ def endif(name='unnamed'):
     downindent()
     
 def padpoint1(name):
-    global condpad
-    condpad[name+'first'] = len(s)
-    var('ifone'+name)
+    global s,dike
+    if dike:
+        return
+    s+='PADPOINT1'+name
     
 def padpoint2(name):
-    global condpad
-    condpad[name+'second'] = len(s)
-    var('iftwo'+name)
+    global s,dike
+    if dike:
+        return
+    s+='PADPOINT2'+name
 
 #combined if/else/end overhead: firstbranch: x {...} k 1 (k)
-#                               secondbranch: x 0 {...} k (k)
+#                               secondbranch: x 0 x {...} (k)
 #for ifzero:                     firstbranch: x 1/2 x* |x| {...} k 1 (k)
-#                               secondbranch: x 1/2 x* |x| 0 {...} k (k)
-#note the overhead is the same no matter which branch is chosen ...this is what makes looping over conditionals possible!
+#                               secondbranch: x 1/2 x* |x| 0 x {...} (k)
+#because of automatic padding, the overhead is the same no matter which branch is chosen ...this is what makes looping over conditionals possible!
+
+
 
 
 ############################LOGIC###########################
@@ -1331,8 +1363,8 @@ def im():
     
 def arg():
     global dike
-    #input (x) k k k k k k k k k k k k k k k (15 k's)
-    #output x -1 x* x 1/|x| logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) k 1/logK(e) logK(x/|x|) ln(x/|x|) 1/2 ln(x/|x|)* ln(x/|x|) (arg(x)) k
+    #input (x) k k k k k k k k k k k k k (13 k's)
+    #output #x -1 x* 1/|x| logK(x/|x|) 3.09485e+26 1/2 -i 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(x/|x|) (arg(x)) k
     if dike:
         return
     upindent()
@@ -1345,24 +1377,19 @@ def arg():
     go(-1)
     exptarget(1)
     #x 1/2 x* 1/|x| (-1)
-    go(1)
-    multiply(-2,-5)
-    #x 1/2 x* 1/|x| -1 (x/|x|)
-    logtarget(1)
-    #x 1/2 x* 1/|x| -1 logK(x/|x|) (k)
-    makee()
-    #x 1/2 x* 1/|x| -1 logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) (e)
-    logtarget(1)
-    #x -1 x* 1/|x| logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) logK(e) (k)
-    left(1)
     exptarget(-3)
-    right(4)
-    #x -1 x* 1/|x| logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) (k)
-    multiply(-1,-7)
-    #x -1 x* 1/|x| logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) (ln(x/|x|))
-    absval()
+    go(4)
+    multiply(-2,-5)
+    #x 1/2 x* 1/|x| i (x/|x|)
+    ln(True)
+    #x 1/2 x* 1/|x| i logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) (ln(x/|x|))
+    go(-8)
+    exptarget(4)
+    go(4)
+    multiply(-8)
+    #x 1/2 x* 1/|x| -i logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(x/|x|) (arg(x))
     comment('END ARGUMENT')
-    #x -1 x* 1/|x| logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(x/|x|) 1/2 ln(x/|x|)* (arg(x)) k
+    #x 1/2 x* 1/|x| -i logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(x/|x|) (arg(x)) k
     downindent()
 
 def sin(hyperbolic=False):

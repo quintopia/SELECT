@@ -1,20 +1,21 @@
 (5,5,30)
-
-Test tan and atan
-
-   MAKE -1+-2I:
-
-      MAKE 2:
+ 
+   MAKE 5+5I:
+ 
+      MAKE 5:
       EXP. SELECT.
       EXP. RIGHT. SELECT.
+      LEFT. EXP. RIGHT. SELECT.
+      LEFT. EXP. RIGHT. SELECT.
+      LEFT. EXP. RIGHT. SELECT.
       LEFT. LOG. RIGHT. SELECT.
       LEFT. LOG. RIGHT. SELECT.
        
-      END MAKE 2
-
+      END MAKE 5
+ 
       
       MAKE I:
-
+ 
          MAKE 1/2:
          RIGHT. EXP. SELECT.
          EXP. LEFT. SELECT.
@@ -27,12 +28,17 @@ Test tan and atan
       RIGHT. 
          
          MAKE -1:
-         RIGHT. EXP. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-         EXP. LEFT. SELECT.
-         
-         MARK AS makenumsign
-         LOG. RIGHT. SELECT.
+ 
+            MAKE 1/K:
+            RIGHT. EXP. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            
+            MARK AS makenumsign
+            LOG. RIGHT. SELECT.
+            
+            END MAKE 1/K
+            
          LEFT. 
          END MAKE -1
          
@@ -44,27 +50,36 @@ Test tan and atan
    RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
    RIGHT. RIGHT. RIGHT. 
    MARK AS makenumimagpart
-   RIGHT. RIGHT. EXP. SELECT.
-   LEFT. LOG. RIGHT. SELECT.
-   EXP. LEFT. SELECT.
-   
-   MARK AS makenumsign
-   LOG. RIGHT. SELECT.
-   EXP. SELECT.
-   EXP. LEFT. LEFT. SELECT.
-   RIGHT. RIGHT. LOG. RIGHT. SELECT.
-   LEFT. EXP. LEFT. SELECT.
-   RIGHT. LOG. RIGHT. SELECT.
+   RIGHT. EXP. SELECT.
+   EXP. RIGHT. SELECT.
+   LEFT. EXP. RIGHT. SELECT.
+   LEFT. EXP. RIGHT. SELECT.
+   LEFT. EXP. RIGHT. SELECT.
    LEFT. 
-   END MAKE -1+-2I
-   
-PRINT. 
-   
-   TANGENT:
-   RIGHT. 
-      
-      MAKE I:
-
+   COMBINE IMAGINARY PART
+   EXP. LEFT. SELECT.
+   RIGHT. LOG. RIGHT. SELECT.
+   LEFT. LOG. RIGHT. SELECT.
+   LEFT. 
+   END MAKE 5+5I
+ 
+MARK AS fivefive
+PRINT. RIGHT. 
+Test Argument
+ 
+FETCH fivefive
+EXP. LEFT. SELECT.
+RIGHT. LOG. RIGHT. SELECT.
+LEFT. 
+fivefive FETCHED
+ 
+MARK AS fivefive
+ 
+   ARGUMENT:
+ 
+      MAGNITUDE:
+      RIGHT. 
+         
          MAKE 1/2:
          RIGHT. EXP. SELECT.
          EXP. LEFT. SELECT.
@@ -74,157 +89,136 @@ PRINT.
          
          END MAKE 1/2
          
-      RIGHT. 
-         
-         MAKE -1:
-         RIGHT. EXP. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-         EXP. LEFT. SELECT.
-         
-         MARK AS makenumsign
-         LOG. RIGHT. SELECT.
-         LEFT. 
-         END MAKE -1
-         
-      EXP. LEFT. SELECT.
-      RIGHT. 
-      END MAKE I
-
-      (multiply)
-      RIGHT. EXP. LEFT. SELECT.
-      RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-      LEFT. 
-   RIGHT. 
-      
-      MAKE E:
-
-         MAKE 2:
-         EXP. SELECT.
-         EXP. RIGHT. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-          
-         END MAKE 2
-
-         
-         MAKE 2:
-         EXP. SELECT.
-         EXP. RIGHT. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-          
-         END MAKE 2
-
-         
-         MAKE -1:
-         RIGHT. EXP. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-         EXP. LEFT. SELECT.
-         
-         MARK AS makenumsign
-         LOG. RIGHT. SELECT.
-         LEFT. 
-         END MAKE -1
-         
-      LEFT. LEFT. EXP. SELECT.
-      EXP. SELECT.
-      EXP. SELECT.
-      LOG. RIGHT. SELECT.
-      LEFT. EXP. RIGHT. SELECT.
-      LEFT. EXP. RIGHT. SELECT.
-      LEFT. EXP. RIGHT. SELECT.
-      RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-      LEFT. EXP. LEFT. SELECT.
-      RIGHT. RIGHT. EXP. LEFT. SELECT.
-      RIGHT. RIGHT. 
+      RIGHT. EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. LOG. RIGHT. SELECT.
+      LEFT. CONJ. 
          
          (multiply)
-         EXP. LEFT. SELECT.
-         RIGHT. EXP. RIGHT. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
+         RIGHT. EXP. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
          LEFT. 
-      LOG. RIGHT. SELECT.
-      LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
-      END MAKE E
+      EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. 
+      END MAGNITUDE
       
-   EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-   RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
-   RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
+   RIGHT. 
+      
+      MAKE -1:
+ 
+         MAKE 1/K:
+         RIGHT. EXP. SELECT.
+         LEFT. LOG. RIGHT. SELECT.
+         EXP. LEFT. SELECT.
+         
+         MARK AS makenumsign
+         LOG. RIGHT. SELECT.
+         
+         END MAKE 1/K
+         
+      LEFT. 
+      END MAKE -1
+      
+   LEFT. EXP. RIGHT. SELECT.
+   EXP. LEFT. LEFT. LEFT. SELECT.
+   RIGHT. RIGHT. RIGHT. RIGHT. 
+      
+      (multiply)
+      EXP. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+      LEFT. 
+ 
+      NATURAL LOG:
+      LOG. RIGHT. SELECT.
+ 
+         MAKE E:
+ 
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+             
+            END MAKE 2
+ 
+            
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+             
+            END MAKE 2
+ 
+            
+            MAKE -1:
+ 
+               MAKE 1/K:
+               RIGHT. EXP. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
+               EXP. LEFT. SELECT.
+               
+               MARK AS makenumsign
+               LOG. RIGHT. SELECT.
+               
+               END MAKE 1/K
+               
+            LEFT. 
+            END MAKE -1
+            
+         LEFT. LEFT. EXP. SELECT.
+         EXP. SELECT.
+         EXP. SELECT.
+         LOG. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. EXP. LEFT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. SELECT.
+         RIGHT. RIGHT. 
+            
+            (multiply)
+            EXP. LEFT. SELECT.
+            RIGHT. EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. 
+         LOG. RIGHT. SELECT.
+         LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+         END MAKE E
+         
+      LOG. RIGHT. SELECT.
+      LEFT. EXP. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. 
+         
+         (multiply)
+         RIGHT. EXP. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
+      
+      END NATURAL LOG
+      
+   LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. EXP. RIGHT. RIGHT. RIGHT. RIGHT. SELECT.
    RIGHT. RIGHT. RIGHT. RIGHT. 
       
       (multiply)
       RIGHT. EXP. LEFT. SELECT.
-      RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-      LEFT. 
-   RIGHT. EXP. LEFT. LEFT. SELECT.
-   RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
-   RIGHT. RIGHT. RIGHT. 
-      
-      (multiply)
-      EXP. LEFT. SELECT.
-      RIGHT. EXP. RIGHT. SELECT.
-      LEFT. LOG. RIGHT. SELECT.
-      LEFT. 
-   LOG. RIGHT. SELECT.
-
-      (multiply)
-      EXP. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. EXP. RIGHT. SELECT.
-      LEFT. LOG. RIGHT. SELECT.
-      LEFT. 
-   LOG. RIGHT. SELECT.
-   LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-   RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
-      
-      (multiply)
-      RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. EXP. LEFT. SELECT.
-      RIGHT. LOG. RIGHT. SELECT.
-
-      (multiply)
-      EXP. LEFT. SELECT.
-      RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-
-      (multiply)
-      EXP. LEFT. SELECT.
-      RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+      RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
       LEFT. 
    
-   END TANGENT
+   END ARGUMENT
    
-PRINT. RIGHT. LOG. SELECT.
-
-   INVERSE TANGENT:
-   RIGHT. EXP. LEFT. SELECT.
-   RIGHT. LOG. RIGHT. SELECT.
-   LEFT. CONJ. 
-      
-      (multiply)
-      RIGHT. EXP. LEFT. SELECT.
-      RIGHT. EXP. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. LOG. RIGHT. SELECT.
-      LEFT. 
-   RIGHT. 
-      
-      MAKE -1:
-      RIGHT. EXP. SELECT.
-      LEFT. LOG. RIGHT. SELECT.
-      EXP. LEFT. SELECT.
-      
-      MARK AS makenumsign
-      LOG. RIGHT. SELECT.
-       
-      END MAKE -1
-
-      
+PRINT. RIGHT. 
+   
+   MAKE TAU/4:
+ 
       MAKE I:
-
+ 
          MAKE 1/2:
          RIGHT. EXP. SELECT.
          EXP. LEFT. SELECT.
@@ -237,278 +231,122 @@ PRINT. RIGHT. LOG. SELECT.
       RIGHT. 
          
          MAKE -1:
-         RIGHT. EXP. SELECT.
-         LEFT. LOG. RIGHT. SELECT.
-         EXP. LEFT. SELECT.
-         
-         MARK AS makenumsign
-         LOG. RIGHT. SELECT.
+ 
+            MAKE 1/K:
+            RIGHT. EXP. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            EXP. LEFT. SELECT.
+            
+            MARK AS makenumsign
+            LOG. RIGHT. SELECT.
+            
+            END MAKE 1/K
+            
          LEFT. 
          END MAKE -1
          
       EXP. LEFT. SELECT.
       RIGHT. 
       END MAKE I
-
-      (multiply)
-      RIGHT. EXP. LEFT. SELECT.
-      RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-
-      ADD:
-      EXP. LEFT. SELECT.
-      RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
-         
-         (multiply)
-         RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
-         RIGHT. RIGHT. EXP. LEFT. SELECT.
-         RIGHT. LOG. RIGHT. SELECT.
-         LEFT. 
+ 
+      NATURAL LOG:
       LOG. RIGHT. SELECT.
-       
-      END ADD
-
-      
-      (square)
-      EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-      LEFT. 
-   RIGHT. 
-      
-      (square)
-      EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-
-      
-      ADD:
-      EXP. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
-      RIGHT. 
-         
-         (multiply)
-         RIGHT. RIGHT. EXP. LEFT. LEFT. SELECT.
-         RIGHT. RIGHT. EXP. LEFT. SELECT.
-         RIGHT. LOG. RIGHT. SELECT.
-         LEFT. 
-      LOG. RIGHT. SELECT.
-       
-      END ADD
-      
-   EXP. LEFT. SELECT.
-   RIGHT. LOG. RIGHT. SELECT.
-   LEFT. CONJ. 
-      
-      (multiply)
-      RIGHT. EXP. LEFT. SELECT.
-      RIGHT. EXP. LEFT. LEFT. SELECT.
-      RIGHT. RIGHT. LOG. RIGHT. SELECT.
-      LEFT. 
-   EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-   RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
-      
-      IF (atan):
-      LOOP. 
-      MARK AS ifstartatan
-      
-         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-          
-         IF ZERO (ataninner):
-
-            MAGNITUDE:
-
-               MAKE 1/2:
+ 
+         MAKE E:
+ 
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+             
+            END MAKE 2
+ 
+            
+            MAKE 2:
+            EXP. SELECT.
+            EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
+             
+            END MAKE 2
+ 
+            
+            MAKE -1:
+ 
+               MAKE 1/K:
                RIGHT. EXP. SELECT.
-               EXP. LEFT. SELECT.
-               RIGHT. LOG. LEFT. SELECT.
-               LOG. RIGHT. SELECT.
+               LEFT. LOG. RIGHT. SELECT.
                EXP. LEFT. SELECT.
                
-               END MAKE 1/2
-               
-            RIGHT. EXP. LEFT. LEFT. SELECT.
-            RIGHT. RIGHT. LOG. RIGHT. SELECT.
-            LEFT. CONJ. 
-               
-               (multiply)
-               RIGHT. EXP. LEFT. SELECT.
-               RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
-               RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-               LEFT. 
-            EXP. LEFT. LEFT. SELECT.
-            RIGHT. RIGHT. 
-            END MAGNITUDE
-
-            IF (ataninner):
-            LOOP. 
-            MARK AS ifstartataninner
-            
-               RIGHT.  
-                  
-                  (reciprocal)
-                  EXP. LEFT. SELECT.
-                  RIGHT. LOG. RIGHT. SELECT.
-                  LEFT. LEFT. EXP. SELECT.
-                  RIGHT. LOG. LEFT. SELECT.
-                  EXP. RIGHT. SELECT.
-
-                  (multiply)
-                  RIGHT. EXP. LEFT. SELECT.
-                  RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-                  RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-                  LEFT. 
-               RIGHT. RIGHT. LOG. SELECT.
+               MARK AS makenumsign
                LOG. RIGHT. SELECT.
-               LEFT. LEFT. 
-            END. RIGHT. 
                
-               LOGICAL NOT:
-               RIGHT. LOG. SELECT.
-               LOG. RIGHT. SELECT.
-               LEFT. EXP. LEFT. SELECT.
-               RIGHT. 
-               END NOT
-
-            ELSE (ataninner):
-            LOOP. 
-            MARK AS ifelseataninner
+               END MAKE 1/K
+               
+            LEFT. 
+            END MAKE -1
             
-               RIGHT.  
-                  
-                  (reciprocal)
-                  EXP. LEFT. SELECT.
-                  RIGHT. LOG. RIGHT. SELECT.
-                  LEFT. LEFT. EXP. SELECT.
-                  RIGHT. LOG. LEFT. SELECT.
-                  EXP. RIGHT. SELECT.
-
-                  (multiply)
-                  RIGHT. EXP. LEFT. SELECT.
-                  RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-                  RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-
-                  (multiply)
-                  EXP. LEFT. SELECT.
-                  RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-                  RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-                  LEFT. 
-               RIGHT. 
-            END. RIGHT. 
-            END IF (ataninner)
-            
-         RIGHT. RIGHT. LOG. SELECT.
+         LEFT. LEFT. EXP. SELECT.
+         EXP. SELECT.
+         EXP. SELECT.
          LOG. RIGHT. SELECT.
-         LEFT. LEFT. 
-      END. RIGHT. 
-         
-         LOGICAL NOT:
-         RIGHT. LOG. SELECT.
-         LOG. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         LEFT. EXP. RIGHT. SELECT.
+         RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
          LEFT. EXP. LEFT. SELECT.
-         RIGHT. 
-         END NOT
-
-      ELSE (atan):
-      LOOP. 
-      MARK AS ifelseatan
-      
-         RIGHT. LEFT. LEFT. LEFT. LEFT. LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+         RIGHT. RIGHT. EXP. LEFT. SELECT.
+         RIGHT. RIGHT. 
             
             (multiply)
-            EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-            RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-            RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-            LEFT. 
-
-            NATURAL LOG:
-            LOG. RIGHT. SELECT.
-
-               MAKE E:
-
-                  MAKE 2:
-                  EXP. SELECT.
-                  EXP. RIGHT. SELECT.
-                  LEFT. LOG. RIGHT. SELECT.
-                  LEFT. LOG. RIGHT. SELECT.
-                   
-                  END MAKE 2
-
-                  
-                  MAKE 2:
-                  EXP. SELECT.
-                  EXP. RIGHT. SELECT.
-                  LEFT. LOG. RIGHT. SELECT.
-                  LEFT. LOG. RIGHT. SELECT.
-                   
-                  END MAKE 2
-
-                  
-                  MAKE -1:
-                  RIGHT. EXP. SELECT.
-                  LEFT. LOG. RIGHT. SELECT.
-                  EXP. LEFT. SELECT.
-                  
-                  MARK AS makenumsign
-                  LOG. RIGHT. SELECT.
-                  LEFT. 
-                  END MAKE -1
-                  
-               LEFT. LEFT. EXP. SELECT.
-               EXP. SELECT.
-               EXP. SELECT.
-               LOG. RIGHT. SELECT.
-               LEFT. EXP. RIGHT. SELECT.
-               LEFT. EXP. RIGHT. SELECT.
-               LEFT. EXP. RIGHT. SELECT.
-               RIGHT. RIGHT. EXP. LEFT. LEFT. LEFT. SELECT.
-               RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-               LEFT. EXP. LEFT. SELECT.
-               RIGHT. RIGHT. EXP. LEFT. SELECT.
-               RIGHT. RIGHT. 
-                  
-                  (multiply)
-                  EXP. LEFT. SELECT.
-                  RIGHT. EXP. RIGHT. SELECT.
-                  LEFT. LOG. RIGHT. SELECT.
-                  LEFT. 
-               LOG. RIGHT. SELECT.
-               LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-               RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
-               END MAKE E
-               
-            LOG. RIGHT. SELECT.
-            LEFT. EXP. LEFT. LEFT. LEFT. SELECT.
-            RIGHT. RIGHT. RIGHT. 
-               
-               (multiply)
-               RIGHT. EXP. LEFT. SELECT.
-               RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-               RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-
-            END NATURAL LOG
-
-            (multiply)
             EXP. LEFT. SELECT.
-            RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-            RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
-
-            (multiply)
-            EXP. LEFT. SELECT.
-            RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
-            RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+            RIGHT. EXP. RIGHT. SELECT.
+            LEFT. LOG. RIGHT. SELECT.
             LEFT. 
-         RIGHT. 
-      END.  
-      END IF (atan)
+         LOG. RIGHT. SELECT.
+         LEFT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. 
+         END MAKE E
+         
+      LOG. RIGHT. SELECT.
+      LEFT. EXP. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. 
+         
+         (multiply)
+         RIGHT. EXP. LEFT. SELECT.
+         RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+         RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+         LEFT. 
       
-   LEFT. 
-   END INVERSE TANGENT
+      END NATURAL LOG
+      
+   LEFT. LEFT. LEFT. LEFT. EXP. LEFT. LEFT. LEFT. LEFT. SELECT.
+   RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. CONJ. 
+      
+      (multiply)
+      RIGHT. EXP. LEFT. SELECT.
+      RIGHT. EXP. LEFT. LEFT. LEFT. LEFT. LEFT. SELECT.
+      RIGHT. RIGHT. RIGHT. RIGHT. RIGHT. LOG. RIGHT. SELECT.
+ 
+   END MAKE TAU/4
+ 
    
+   MAKE 1/2:
+   RIGHT. EXP. SELECT.
+   EXP. LEFT. SELECT.
+   RIGHT. LOG. LEFT. SELECT.
+   LOG. RIGHT. SELECT.
+   EXP. LEFT. SELECT.
+   
+   END MAKE 1/2
+ 
+   (multiply)
+   RIGHT. EXP. LEFT. SELECT.
+   RIGHT. EXP. LEFT. LEFT. SELECT.
+   RIGHT. RIGHT. LOG. RIGHT. SELECT.
+   LEFT. 
 PRINT. CLEAR. RIGHT. 
 ######GENERATION CODE######
 init(5,5,30)
@@ -533,7 +371,6 @@ makenum(-5,-5)
 comment('Should be -5-5i')
 output()
 clear()
-var('fivefive')
 go(1)
 comment('Test makee - should print 2.71828')
 makee()
@@ -616,11 +453,13 @@ outputleft(3)
 clear()
 go(1)
 comment('Test Opposite and Add')
+turnon()
 makenum(5,5)
+var('fivefive')
 output()
 go(1)
+turnoff()
 fetch('fivefive')
-var('fivefive')
 opposite()
 output()
 clear()
@@ -663,6 +502,7 @@ makenum(-5)
 output()
 clear()
 go(1)
+turnon()
 comment('Test Argument')
 fetch('fivefive')
 var('fivefive')
@@ -673,12 +513,10 @@ maketaufourth()
 go(1)
 makehalf()
 multiply(-1)
-go(1)
-makenum(3)
-multiply(-1)
 output()
 clear()
 go(1)
+turnoff()
 comment('Test ifzero, else, not, endif')
 makenum(-5)
 ifzero('dontprint')
@@ -723,7 +561,7 @@ acos()
 output()
 clear()
 go(1)
-turnon()
+turnoff()
 comment('Test tan and atan')
 makenum(-1,-2)
 output()
@@ -739,6 +577,15 @@ go(1)
 #atan2(-1-2i,-2+i) = i*infty
 #atan2(-1-2i,2-i) = -i*infty
 writetofile('fulltest')
+
+
+
+
+
+
+
+
+
 
 
 
