@@ -39,7 +39,7 @@ else:
 if options.val==1:
     val = mpmath.mpf(random.uniform(1,1.0000001))
 else:
-    val = mpmath.mpmathify(args['val'])
+    val = mpmath.mpmathify(options.val)
 
 mpmath.mp.dps=options.precision
 verbose=options.verbose
@@ -194,7 +194,11 @@ def select():
         sys.exit()
     elif lastop==1:
         if a[argindex]!=0 or mpmath.im(a[listindex])!=0 or a[listindex]>=0:
-            a[argindex]=mpmath.power(a[argindex],a[listindex])
+            try:
+                a[argindex]=mpmath.power(a[argindex],a[listindex])
+            except OverflowError:
+                print('Number too large to represent. Try increasing precision or moving default tape value closer to 1.')
+                print(greporig(pointer))
             a[argindex]=mpmath.chop(a[argindex],tol)
         else:
             a[argindex]=mpmath.mpc('inf')
@@ -253,12 +257,16 @@ def drawbox():
         print('Outputting: '+mpmath.nstr(mpmath.chop(a[listindex])))
     if mpmath.isnan(a[listindex]) or mpmath.isinf(a[listindex]):
         return
-    x = int(mpmath.nint(mpmath.re(a[listindex])))+centerx
-    y = int(mpmath.nint(mpmath.im(a[listindex])))+centery
-    if (x,y) in pixdict:
-        canv.delete(pixdict[(x,y)])
-        del pixdict[(x,y)]
-    pixdict[(x,y)] = canv.create_rectangle(x*z-z+1,y*z-z+1,x*z+1,y*z+1,fill=rgb(red,green,blue),width=0)
+    try:
+        x = int(mpmath.nint(mpmath.re(a[listindex])))+centerx
+        y = int(mpmath.nint(mpmath.im(a[listindex])))+centery
+        if (x,y) in pixdict:
+            canv.delete(pixdict[(x,y)])
+            del pixdict[(x,y)]
+        pixdict[(x,y)] = canv.create_rectangle(x*z-z+1,y*z-z+1,x*z+1,y*z+1,fill=rgb(red,green,blue),width=0)
+    except OverflowError:
+        #the number is so huge it's not going to be displayed anyway, so just suppress the error and move on
+        pass
 def deletepix():
     global pixdict,canv
     canv.delete(ALL)
@@ -306,16 +314,25 @@ commands = {'s': select,
 def main():
     #start the eval loop
     global pointer,waiting,cycles
-    c = theFile[pointer]
-    commands[c]();
-    pointer+=1
-    if pointer<len(theFile) and not waiting:
-        if cycles<200:
-            master.after(0,main)
-        else:
-            master.after(1,main)
-            cycles=0
-        cycles+=1
+    try:
+        c = theFile[pointer]
+        commands[c]();
+        pointer+=1
+        if pointer<len(theFile) and not waiting:
+            if cycles<200:
+                master.after(0,main)
+            else:
+                master.after(1,main)
+                cycles=0
+            cycles+=1
+        elif pointer>=len(theFile):
+            #TODO:this should really be a dialog saying the program is done, rerun it or quit?
+            master.after(3000,quit)
+    except KeyboardInterrupt,SystemExit:
+        print('Program terminated by user while executing instruction '+str(pointer))
+        print(greporig(pointer))
+    except:
+        raise
 master.after_idle(main)
 mainloop()
 
