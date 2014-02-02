@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#SELECT. Code Generator v0.3 by Quintopia
+#SELECT. Code Generator v0.5 by Quintopia
 # All code-generating functions in this file are right-growing, meaning they make the following guarantees:
 # * They do not read or write cells to the left of the current cell at call time.
 # * The result that the algorithm computes will be contained in the rightmost cell clobbered by the algorithm.
@@ -12,20 +12,38 @@
 # To use a left-growing algorithm instead, use leftgr(). 
 # E.g.: leftgr(add) writes out a left-growing addition algorithm with the sum leftmost
 
-#TODO: test padded conditionals, arg
+#TODO: update docs for: if/els/endif, arg, loop, switch, startleftgr, endleftgr
+#TODO: test switch
+#TODO: fix loop to use the lower overhead method used in switch
 
 
 from re import sub,DOTALL
+from itertools import dropwhile
 import sys
 
-s=''
+version = 0.5
+#the list of strings that becomes the program
+l=[]
+#the height of the display
 h=0
+#the width of the display
 w=0
+#the position (in the complex plane) of the top row on the display
+toploc=0
+#the position (in the complex plane) of the left column on the display
+leftloc=0
+#the number of spaces to put at the beginning of a line
 indentlevel=0
+#a table of named tape locations
 vardict = {}
+#the "absolute" location of the tape head (maybe)
 offset = 0
+#set to True to prevent any code output. set by turnon() and turnoff()
 dike = False
-
+#set to True to allow LEFT. and RIGHT. to be output. only becomes true once a SELECT., CONJ., or GET. are output, as these are the only commands which can change the tape. prevents extraneous tapehead
+#motion at the beginning of a program.
+domove = False
+#painstakingly drawn pixelmaps of printable ASCII characters. based on 7pt Deja Vu Sans Mono (with the anti-aliasing removed)
 letterforms = {' ':[],
                '!':[(0,-4),(0,-3),(0,-2),(0,-1),(0,0),(0,2)],
                '"':[(1,-4),(1,-3),(-1,-4),(-1,-3)],
@@ -39,7 +57,7 @@ letterforms = {' ':[],
                '+':[(-1,3),(-1,2),(-3,1),(-2,1),(-1,1),(0,1),(1,1),(-1,0),(-1,-1),],
                ',':[(-1,5),(-1,4),],
                '-':[(-1,1),(0,1),],
-               '.':[(-1,3)],
+               '.':[(-1,2)],
                '/':[(0,-4),(-1,-3),(-1,-2),(-2,-1),(-2,0),(-2,1),(-3,2),],
                '0':[(-1,-4),(0,-4),(-2,-3),(1,-3),(-2,-2),(1,-2),(-2,-1),(0,-1),(1,-1),(-2,0),(1,0),(-2,1),(1,1),(-1,2),(0,2),],
                '1':[(-1,-4),(0,-4),(0,-3),(0,-2),(0,-1),(0,0),(0,1),(0,2),(-1,2),(1,2)],
@@ -127,24 +145,27 @@ letterforms = {' ':[],
 
 #############UTILITY FUNCTIONS#####################
 
+def _rindex(lst, item):
+    try:
+        return dropwhile(lambda x: lst[x] != item, reversed(xrange(len(lst)))).next()
+    except StopIteration:
+        raise ValueError, "_rindex(lst, item): item not in list"
+
 #optimize the program string and write it to the named file
 def writetofile(filename):
-    global s,code
+    global l,code
+    s=''.join(l)
     s = sub('\n\s*?\n\s*?\n','\n\n',s)
     filename = sub('.sel','',filename)
     oldstring=s
     while True:
         oldstring=s
         s=sub('(?s)LEFT\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)RIGHT\. ','\g<comment>',s)
-        if oldstring==s:
-            break
-    while True:
-        oldstring=s
         s=sub('(?s)RIGHT\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)LEFT\. ','\g<comment>',s)
+        s=sub('(?s)CONJ\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)CONJ\.','\g<comment>',s)
         if oldstring==s:
             break
-        
-    s = sub('\n\s*?\n\s*?\n','\n\n',s)
+    s = sub('\n\s*?\n\s*?\n','\n \n',s)
     s = sub('\*%(?P<comment>.*)%\*','\g<comment>',s)
     s = sub('\n\n','\n \n',s) #so we can post these to the wiki easily
     
@@ -159,20 +180,23 @@ def writetofile(filename):
     openfile.close()
     s=''
     
-def leftgr(fun,arg1=None,arg2=None):
-    global s
-    startlength = len(s)
-    if arg==None:
-        fun()
-    elif arg2==None:
-        fun(arg1)
-    else:
-        fun(arg1,arg2)
-    if len(s)>startlength:
-        newend=s[startlength:].replace('RIGHT. ','repl ')
-        newend=newend.replace('LEFT. ','RIGHT. ')
-        newend=newend.replace('repl ','LEFT. ')
-        s=s[0:startlength]+newend
+def startleftgr():
+    if dike:
+        return
+    l.append('STARTLEFTGROWING')
+    
+def endleftgr():
+    global l
+    doreplace = False
+    for i,s in enumerate(l):
+        if s=='STARTLEFTGROWING':
+            doreplace=True
+            del l[i]
+            continue
+        if doreplace:
+            s=s.replace('RIGHT. ','repl ')
+            s=s.replace('LEFT. ','RIGHT. ')
+            l[i]=s.replace('repl ','LEFT. ')
 
 def turnoff():
     global dike
@@ -184,26 +208,32 @@ def turnon():
 #######################FILE FORMATTING AND DECORATION#########################
 
 def comment(note):
-    global s,indentlevel,dike
+    global l,indentlevel,dike
     if dike:
         return
-    s+='\n*%'+(' '*indentlevel)+note+'%*\n'+(' '*indentlevel)
+    note=note.replace('\n','\\n')
+    l.append('\n*%'+(' '*indentlevel)+note+'%*\n'+(' '*indentlevel))
 
-def init(x,y,z):
-    global s,h,w
+def init(x,y,z,desc=None):
+    global l,h,w,toploc,leftloc
     h=y
     w=x
-    s="("+str(x)+","+str(y)+","+str(z)+")\n"
+    toploc=-(h-1)/2
+    leftloc=-(w-1)/2
+    l.append("("+str(x)+","+str(y)+","+str(z)+")\n")
+    if desc is not None:
+        l.append(desc+'\n')
+    l.append("Generated by Quintopia's Select. Code Generator version "+str(version)+'\n')
 
 def upindent():
-    global s,indentlevel
+    global l,indentlevel
     indentlevel+=3
-    s+='\n'+(' '*indentlevel)
+    l.append('\n'+(' '*indentlevel))
 
 def downindent():
-    global s,indentlevel
+    global l,indentlevel
     indentlevel-=3
-    s+='\n'+(' '*indentlevel)
+    l.append('\n'+(' '*indentlevel))
     
     
     
@@ -215,10 +245,10 @@ def downindent():
 #TODO: drawing letterforms
 #TODO: R,G,B to complex number conversion
 def output():
-    global s,dike
+    global l,dike
     if dike:
         return
-    s+='PRINT. '
+    l.append('PRINT. ')
 
 def drawpixel(x,y):
     global dike,h,w
@@ -232,13 +262,14 @@ def drawpixel(x,y):
     downindent()
 
 def input():
-    global s,dike
+    global l,dike,domove
     if dike:
         return
-    s+='GET. '
+    domove=True
+    l.append('GET. ')
 
 def outputleft(n):
-    global s,dike
+    global dike
     if dike:
         return
     output()
@@ -248,7 +279,7 @@ def outputleft(n):
     right(n-1)
 
 def outputright(n):
-    global s,dike
+    global dike
     if dike:
         return
     output()
@@ -258,18 +289,18 @@ def outputright(n):
     left(n-1)
 
 def clear():
-    global s,dike
+    global l,dike,domove
     if dike:
         return
-    s+='CLEAR. '
+    l.append('CLEAR. ')
 
 def color():
-    global s,dike
+    global l,dike,domove
     if dike:
         return
-    s+='COLOR. '
+    l.append('COLOR. ')
 
-def drawString(string,x,y,top=0,bottom=None,left=0,right=None):
+def drawStringLiteral(string,x,y,top=0,bottom=None,left=0,right=None):
     global dike,h,w
     if dike:
         return
@@ -279,24 +310,41 @@ def drawString(string,x,y,top=0,bottom=None,left=0,right=None):
         bottom=h
     if right is None:
         right=w
+    string = string+' '
     string = string.replace('\n',' \n')  #insert a space before every newline to simplify algorithm
     string = string.replace('\t',' \t')  #same for tabs
     for i,c in enumerate(string):
-        if y>bottom:                            #if we would go off the bottom of the screen, block for input instead, then clear once we have it
-            go(-1)
-            input()
-            go(1)
-            clear()
-            y=top
         if c=='\t':
             x=x+15                                      #counting the space before the tab, a tab is four spaces
             continue
-        remainder = string.find(' ',i+1)-i
-        nextword = string.find(' ',i+remainder+1)-remainder
-        if x>right or c=='\n' or (x+5*remainder>right and remainder*5<right-left and nextword*5<right-left):  #reset to left side if we're off the right side (from tabbing) or at newline or will not see whitespace before we hit the right side unless the next word is longer than a line
+        remainder = min(string.find(' ',i+1)-i,string.find('-',i+1)-i+1)
+        if remainder<0:
+            if string.find(' ',i+1)-i>0:
+                remainder=string.find(' ',i+1)-i
+            elif string.find('-',i+1)-i>0:
+                remainder=string.find('-',i+1)-i+1
+            else:
+                remainder=len(string)-i
+        nextword = min(string.find(' ',i+remainder+1)-i-remainder-1,string.find('-',i+remainder+1)-i-remainder)
+        if nextword<0:
+            if string.find('-',i+remainder+1)-i-remainder-1>0:
+                nextword=string.find('-',i+remainder+1)-i-remainder
+            elif string.find(' ',i+remainder+1)-i-remainder-1>0:
+                nextword=string.find(' ',i+remainder+1)-i-remainder-1
+            else:
+                nextword=0
+        if x>right-5 or c=='\n' or (x+5*remainder>right-5 and remainder*5<right-left and nextword*5<right-left):  #reset to left side if we're off the right side (from tabbing) or at newline or will not see whitespace before we hit the right side unless the next word is longer than a line
+            if i+1<len(string) and string[i+1]=='\n' and c!='\n':
+                continue
             y=y+12
             x=left
-            if c=='\n':                             #go on to next character if it was a newline, otherwise try to print current char
+            if y>bottom-12:                            #if we would go off the bottom of the screen, block for input instead, then clear once we have it
+                go(-1)
+                input()
+                go(1)
+                clear()
+                y=top
+            if c=='\n' or c==' ':                             #go on to next character if it was a newline or space, otherwise try to print current char
                 continue
         if c!=' ':
             drawLetterXY(c,x,y)
@@ -305,7 +353,7 @@ def drawString(string,x,y,top=0,bottom=None,left=0,right=None):
     downindent()
 
 def drawLetterXY(c,x,y):
-    global letterforms,dike
+    global letterforms,dike,top,left
     if dike:
         return
     upindent()
@@ -314,7 +362,7 @@ def drawLetterXY(c,x,y):
     if form is None:
         return
     for n in form:
-        makenum(x+n[0]+3,y+n[1]+6)
+        makenum(x+n[0]+3+leftloc,y+n[1]+6+toploc)
         output()
         go(1)
     comment('END DRAW LETTER "'+c+'"')
@@ -359,19 +407,19 @@ def drawLetter(c):
 
 #######################COMMON ACTIONS IN SELECT############################
 def left(n):
-    global s,offset,dike
-    if dike:
+    global l,offset,dike
+    if dike or not domove:
         return
     for i in range(n):
-        s+='LEFT. '
+        l.append('LEFT. ')
         offset-=1
 
 def right(n):
-    global s,offset,dike
-    if dike:
+    global l,offset,dike
+    if dike or not domove:
         return
     for i in range(n):
-        s+='RIGHT. '
+        l.append('RIGHT. ')
         offset+=1
         
 def go(n):
@@ -384,26 +432,28 @@ def go(n):
         right(n)
 
 def exptarget(n):
-    global s,indentlevel,dike
+    global l,indentlevel,dike
     if dike:
         return
-    s+='EXP. '
+    l.append('EXP. ')
     if n<0:
         left(-n)
     elif n>0:
         right(n)
-    s+='SELECT.\n'+(' '*indentlevel)
+    l.append('SELECT.\n'+(' '*indentlevel))
+    domove=True
 
 def logtarget(n):
-    global s,indentlevel,dike
+    global l,indentlevel,dike
     if dike:
         return
-    s+='LOG. '
+    l.append('LOG. ')
     if n<0:
         left(-n)
     elif n>0:
         right(n)
-    s+='SELECT.\n'+(' '*indentlevel)
+    l.append('SELECT.\n'+(' '*indentlevel))
+    domove=True
 
 def copyfrom(n):
     global dike
@@ -414,15 +464,17 @@ def copyfrom(n):
     logtarget(1)
     left(1)
 
-def var(name):
+def var(name,savelist=None):
     global dike
     if dike:
         return
     global vardict,offset,s,indentlevel
     vardict[name] = offset
+    if savelist is not None:
+        savelist.append(name)
     #add the comment here manually so that it doesn't get the left/right stripped from around it, so that we actually are on the cell the comment claims to be marking.
     #yes, it doesn't change the behavior of the code to strip them, but the code we output should be correctly documented
-    s+='\n'+(' '*indentlevel)+'MARK AS '+name+'\n'+(' '*indentlevel)
+    l.append('\n'+(' '*indentlevel)+'MARK AS '+name+'\n'+(' '*indentlevel))
 
 def fetch(name):
     global vardict,offset,dike
@@ -449,7 +501,7 @@ def halt():
     global s,dike
     if dike:
         return
-    s+='HALT. \n!!!!PROGRAM EXIT POINT!!!!\n'
+    l.append('HALT. \n!!!!PROGRAM EXIT POINT!!!!\n')
 
 
 
@@ -460,11 +512,11 @@ def halt():
 #TODO: Test loops with their counts stored on tape.
 #TODO: Test (bounded and simple) loops with the auto-fetching savelist
 def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
-    global s,dike
+    global l,dike
     if dike:
         return
     #input: [(k) | (x) k] k k k k k k k k k k k k k k k k k k k {k k k k {k k} {k k k k {k k k}}} (20,24/26,28/30,31/33)k's
-    #output: 1/sqrt(2) -1 1/2 i -1 k^i k^-1 -1+i (-1+i)/sqrt(2) -1 1/n 1/2 i^(1/(2n)) k k*i^(1/(2n)) (sentinel) {k}...
+    #output: 1/sqrt(2) -1 1/2 i -1 k^i k^-1 -1+i (-1+i)/sqrt(2) -1 1/n 1/2 i^(1/n) k k*i^(1/n) (sentinel) {k}...
           #... 1/2 sentinel* sentinel ...                                                               computei=True and...  
             #... (i) k                                                                                  ...step=1 or
             #... {loopcount step} ...                                                                   ...step>1 and...
@@ -512,7 +564,7 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
     go(2)
     multiply()
     var(name+'step')
-    #...-1 1/n 1/2 i^(1/(2n)) k (k*i^(1/(2n))) k
+    #...-1 1/n 1/2 i^(1/n) k (k*i^(1/n)) k
     if savelist is not None:
         go(1)
         for varname in savelist:
@@ -529,7 +581,7 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
     go(1)
     fetch(name+'sentinel')
     var(name+'sentinel')
-    s+='LOOP. '
+    l.append('LOOP. ')
     upindent()
     if computei:
         absval()
@@ -563,7 +615,7 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
     #do not down indent. that is in endloop()
     
 def endloop(name,computei=False,start=0,savelist=None):
-    global s,dike
+    global l,dike
     if dike:
         return
     #input: (k) k k k {k k k k k {k k k k {k k k k}}} (4,9,13,17)k's
@@ -584,7 +636,7 @@ def endloop(name,computei=False,start=0,savelist=None):
     multiply()
     #sentinel step (sentinel*step) k
     downindent()
-    s+='END. '
+    l.append('END. ')
     if computei:
         absval()
         #...sentinel 1/2 sentinel* (|sentinel|) k
@@ -614,7 +666,7 @@ def endloop(name,computei=False,start=0,savelist=None):
     downindent()
 
 def repeat(savelist=None):
-    global s,dike
+    global l,dike
     if dike:
         return
     upindent()
@@ -627,10 +679,10 @@ def repeat(savelist=None):
             var(varname)
             go(1)
         fetch("repeatsentinel")
-    s+="LOOP. "
+    l.append("LOOP. ")
 
 def endrepeat(savelist=None):
-    global s,dike
+    global l,dike
     if dike:
         return
     if savelist is not None:
@@ -641,7 +693,7 @@ def endrepeat(savelist=None):
             var(varname)
             go(1)
         fetch("repeatsentinel")
-    s+="END. "
+    l.append("END. ")
     comment("END WHILE")
     downindent()
 
@@ -653,7 +705,7 @@ def endrepeat(savelist=None):
 
 ##############################################CONDITIONALS##################################################
 def ifnonpositive(name):
-    global s,dike
+    global l,dike
     if dike:
         return
     #x must be a real number!
@@ -661,7 +713,7 @@ def ifnonpositive(name):
     #output: (x) ?
     upindent()
     comment('IF ('+name+'):')
-    s+='LOOP. '
+    l.append('LOOP. ')
     var('ifstart'+name)
     upindent()
     #no downindent
@@ -679,24 +731,24 @@ def ifzero(name):
     copyfrom(-4)
     
 def els(name,copy=True):
-    global s,dike,offset
+    global l,dike,offset
     if dike:
         return
     #input: (x|?) k k k k
     #output: x k 0 (x) k
-    if s.rfind('PADPOINT1'+name)<0:
-        padpoint1(name)
+    if 'PADPOINT1'+name not in l:
+        padpoint(1,name)
     go(1)
     var('ifone'+name)
     go(1)
     makezero()
     go(-1)
     downindent()
-    s+='END. '
+    l.append('END. ')
     go(1)
     lnot()
     comment('ELSE ('+name+'):')
-    s+='LOOP. '
+    l.append('LOOP. ')
     #THE OFFSET HERE WOULD BE THE SAME AS THE OFFSET AT THE BEGINNING OF THE FIRST IF BLOCK PLUS 2 (since only one of the two will be executed)
     offset+=getoffset('ifstart'+name)+2
     var('ifelse'+name)
@@ -706,7 +758,7 @@ def els(name,copy=True):
         copyfrom(-2)
 
 def endif(name):
-    global s,dike,vardict,offset
+    global l,dike,vardict,offset
     if dike:
         return
     #input: (x) k
@@ -718,8 +770,8 @@ def endif(name):
     if 'ifelse'+name in vardict:
         #calculate displacement of first branch
         b1length = getoffset('ifone'+name)-getoffset('ifstart'+name)
-        if s.rfind('PADPOINT2'+name)<0:
-            padpoint2(name)
+        if 'PADPOINT2'+name not in l:
+            padpoint(2,name)
         go(1)
         #calculate displacement of second branch
         b2length = -getoffset('ifelse'+name)
@@ -728,31 +780,30 @@ def endif(name):
             #this branch is further right. insert rights at padpoint1
             padlength=b2length-b1length
             offset+=padlength
-            s=s.replace('PADPOINT1'+name,'({'+'RIGHT. '*padlength+'})')
-            s=s.replace('PADPOINT2'+name,'')
+            pp=_rindex(l,'PADPOINT1'+name)
+            l[pp]='({'+'RIGHT. '*padlength+'})'
+            pp=_rindex(l,'PADPOINT2'+name)
+            del l[pp]
         else:
             #insert rights at padpoint2
             padlength=b1length-b2length
             offset+=padlength
-            s=s.replace('PADPOINT2'+name,'({ '+'RIGHT. '*padlength+'}) ')
-            s=s.replace('PADPOINT1'+name,'')
+            pp=_rindex(l,'PADPOINT2'+name)
+            l[pp]='({'+'RIGHT. '*padlength+'})'
+            pp=_rindex(l,'PADPOINT1'+name)
+            del l[pp]
     downindent()
-    s+='END. '
+    l.append('END. ')
     go(1)
     comment('END IF ('+name+')')
     downindent()
     
-def padpoint1(name):
-    global s,dike
+def padpoint(n,name):
+    global l,dike
     if dike:
         return
-    s+='PADPOINT1'+name
+    l.append('PADPOINT'+str(n)+name)
     
-def padpoint2(name):
-    global s,dike
-    if dike:
-        return
-    s+='PADPOINT2'+name
 
 #combined if/else/end overhead: firstbranch: x {...} k 1 (k)
 #                               secondbranch: x 0 x {...} (k)
@@ -761,7 +812,125 @@ def padpoint2(name):
 #because of automatic padding, the overhead is the same no matter which branch is chosen ...this is what makes looping over conditionals possible!
 
 
-
+#evaluate f(x) by generating code for f(k) for k from 1 to n and running the code for f(k) only if x=k (x must be a positive integer!!!!)
+#so really it's just an unrolled loop, with a conditional for each iteration, and in between it decrements k, entering a conditional when k hits zero (which will correspond to the original value of k)
+#or a giant if/else chain, where the conditions are sequential guesses at the value of x
+#n is the number of cases to try (the integers 1..n), and f is a function that takes an integer argument (or None) and generates code (None is the "default" case--for when all cases fail)
+#fetchx specifies whether the code generated by f needs x under the tapehead when it executes, and so if True, will copy it there
+def switch(name,n,f,fetchx=False):
+    global l,dike,offset
+    offsets = {}
+    if dike:
+        return
+    #input: (x) k*(22+f's max tape usage)
+    #let sen=(-1+i)/sqrt(2), step=logSEN(i*sen)^(1/x), fin=sen^step^n
+    #output: zero: x 1/2 x* |x| x {...} k 1 (k)
+    #        regular: x 1/2 x* |x| x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step i*sen {...} 1 -1 k 1/k 0 (k)
+    #        default: x 1/2 x* |x| x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step fin -1 k^fin 1/k fin-1 {...} 1 (k)
+    upindent()
+    comment('SWITCH ('+name+') WITH '+str(n)+' CASES')
+    #we'll start with the test case for zero. it won't change much except the tape use profile. it needs to be padded too. but wait...it gets auto-padded already.
+    #create the test sentinel and step just like the one for loop()
+    ifzero("switchbigcond"+name)
+    if not fetchx:
+        go(1)
+    f(0)
+    els("switchbigcond"+name)
+    var(name+'X')
+    go(1)
+    copyfrom(-1)
+    go(1)
+    makenum(2)
+    go(1)
+    makeneg1()
+    go(1)
+    makei()
+    #x x 2 -1 1/2 (i)
+    add(-2)
+    #x x 2 -1 1/2 i k^i k^-1 (-1+i) k
+    go(-6)
+    exptarget(2)
+    go(-2)
+    exptarget(1)
+    #x x 1/sqrt(2) (-1) 1/2 i k^i k^-1 -1+i k
+    go(-2)
+    exptarget(2)
+    #x 1/x 1/sqrt(2) (-1) 1/2 i k^i k^-1 -1+i k
+    go(5)
+    multiply(-6)
+    #x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i ((-1+i)/sqrt(2)=sen) k
+    var(name+'sentinel')
+    multiply(-4)
+    #x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen (i*sen) k
+    logtarget(-1)
+    #x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen (logSEN(i*sen)) k
+    exptarget(-9)
+    go(9)
+    #x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen (logSEN(i*sen)^(1/x)=step) k
+    go(1)
+    fetch(name+'sentinel')
+    startpoint=getoffset()
+    for k in range(n):
+        l.append('LOOP. ')
+        upindent()
+        comment('CASE ('+name+') #'+str(k+1)+':')
+        offset=startpoint
+        go(1)
+        if fetchx:
+            fetch(name+'X')
+        f(k)
+        if 'PADPOINT'+str(k)+name not in l:
+            padpoint(k,name)
+        go(1)
+        #make sure that none of the cases after this one will run.
+        makeone()
+        offsets.append(getoffset()-startpoint)
+        comment('END CASE ('+name+') #'+str(k+1))
+        downindent()
+        l.append('END. ')
+        exptarget(-1)
+        go(1)
+    #if something has run: x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step i*sen {...} (1) k
+    #if something has not run: x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step (sen^step^n=fin) k
+    #now the default case. If one of the above cases has run, then sentinel=1 (the current tape cell), so we run this one for all other values.
+    go(1)
+    makeneg1()
+    add(-1)
+    #if something has run: x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step i*sen {...} 1 -1 k 1/k (0) k
+    #if something has not run: x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step fin -1 k^fin 1/k (fin-1) k
+    l.append('LOOP. ')
+    upindent()
+    comment('DEFAULT CASE:')
+    startpoint=getoffset()
+    go(1)
+    if fetchx:
+        fetch('switch'+name+'X')
+    f(k)
+    if s.rfind('PADPOINT'+str(n)+name)<0:
+        padpoint(n,name)
+    go(1)
+    #make sure that none of the cases after this one will run.
+    makeone()
+    offsets.append(getoffset()-startpoint)
+    comment('END CASE '+str(k))
+    downindent()
+    l.append('END. ')
+    #if something has run: x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step i*sen {...} 1 -1 k 1/k (0) k
+    #if something has not run: x 1/x 1/sqrt(2) -1 1/2 i k^i k^-1 -1+i sen step fin -1 k^fin 1/k fin-1 {...} (1) k
+    endif("switchbigcond"+name)
+    #compute the max tape usage in any branch (we'll pad up to it in other branches)
+    maxpad=max(offsets)
+    #iterate through and pad too-small branches
+    for k in range(n+1):
+        padlength=maxpad-offsets[k]
+        pp=_rindex(l,'PADPOINT'+str(k)+name)
+        if padlength>0:
+            l[pp]='({'+'RIGHT. '*padlength+'})'
+        else:
+            del l[pp]
+    comment('END SWITCH ('+name+')')
+    dowindent()
+    
 
 ############################LOGIC###########################
 
@@ -1148,7 +1317,8 @@ def square(target=0):
     logtarget(1)
     left(1)
     downindent()
-    
+
+#cannot increment 1 or 0
 def inc():
     global dike
     #input (x) k k
@@ -1167,6 +1337,7 @@ def inc():
     go(1)
     downindent()
 
+#cannot decrement 1 or 0
 def dec():
     global dike
     #input (x) k k k
@@ -1200,6 +1371,7 @@ def dec():
     go(2)
     downindent()
 
+#cannot reciprocal 1 (or 0, duh)
 def reciprocal():
     global dike
     #this only works if x!=1! obviously, in that case you needn't be reciprocating anyway, but if you can't guarantee it, do x^-1 manually instead
@@ -1267,10 +1439,11 @@ def add(target=1):
     downindent()
 
 def conj():
-    global s,dike
+    global l,dike
     if dike:
         return
-    s+='CONJ. '
+    domove=True
+    l.append('CONJ. ')
 
 def ln(clobberinput=False):
     global dike
@@ -1834,7 +2007,7 @@ def atan(hyperbolic=False):
     
 ###CODE GENERATION AREA
 if len(sys.argv)<2:
-    print('SELECT. Code generator v. 1.0 by Quintopia.\nUsage: python selectcodegen.py [filename]')
+    print('SELECT. Code generator v.'+str(version)+' by Quintopia.\nUsage: python selectcodegen.py [filename]')
 try:
     openfile = file(sys.argv[1],"r")
 except IOError:
