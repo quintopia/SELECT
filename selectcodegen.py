@@ -13,6 +13,7 @@
 # E.g.: leftgr(add) writes out a left-growing addition algorithm with the sum leftmost
 
 #TODO: update docs for: switch, drawStringLiteral, drawLetterXY, drawdigitXY
+#TODO: divmod
 
 
 from re import sub,DOTALL,finditer
@@ -314,8 +315,8 @@ def color():
 def digitprintXY(x,y):
     if dike:
         return
-    #input: (x) k*whoknows? (probably not more than k*105)
-    #output: x {...} (k)
+    #input: (x) k*86
+    #output: x 1/2 x* |x| x {...} 1|k (k)
     def digits(n):
         if n<10 and n>=0:
             drawletterXY(chr(n+48),x,y)
@@ -379,6 +380,8 @@ def drawstringliteral(string,x,y,top=0,bottom=None,left=0,right=None):
 
 def drawletterXY(c,x,y,simulate=False):
     global letterforms,dike,top,left
+    #input: (k) {k k? k? k? k?}*(at most 25)
+    #output: differentnumbers*(at most 125) (k)
     if dike:
         return
     upindent()
@@ -399,19 +402,11 @@ def drawletter(c):
     global letterforms,dike
     if dike:
         return
+    #input: (x+yi) {k k k k k k? k? k? k?}*(at most 25)
+    #output: x+yi {? ?? ?? ?? ?? x+yi k^(?) k^(x+yi) (x+?)+(y+?)i} (k)
     upindent()
     comment('DRAW LETTER "'+c+'"')
     var('drawLetterPosition')
-    if c=='\t':
-        go(1)
-        makenum(20)
-        add(-1)
-        return
-    if c=='\n':
-        go(1)
-        makenum(imag=12)
-        add(-1)
-        return
     form = letterforms[c]
     if form is None:
         return
@@ -848,7 +843,7 @@ def switch(name,n,f,fetchx=False):
     offsets = []
     if dike:
         return
-    #input: (x) k*(22+f's max tape usage)
+    #input: (x) k*(10+f's max tape usage)
     #let fin=i^(2^((n-1)/x-2))
     #output: zero: x 1/2 x* |x| x {...} k 1 (k)
     #        regular: x 1/2 x* |x| x 1/x -1 2^(1/x) i^(1/4) {...} 1 (k)
@@ -1079,6 +1074,7 @@ def makenum(real=0,imag=0):
             exptarget(shift)
             go(-shift) 
         logtarget(1)
+        #TODO: We could special case 4,27,64 using 2^2,3^3,(2^2)^(2^2)
         left(1)
     real=sign*real
     if real==-1 and imag==0:
@@ -1510,8 +1506,8 @@ def absval():
 
 def re():
     global dike
-    #input: (x) k k k k k k k k k (9 k's)
-    #output: x x* k^x k^x* 2Re(x) 1/2 2Re(x) (Re(x)) k
+    #input: (x) k k k k k k k k (8 k's)
+    #output: x x* k^x k^x* 2Re(x) 1/2 (Re(x)) k
     if dike:
         return
     upindent()
@@ -1523,10 +1519,7 @@ def re():
     add()
     right(1)
     makehalf()
-    right(1)
-    copyfrom(-2)
-    left(1)
-    multiply()
+    multiply(-1)
     comment('END REAL PART')
     downindent()
 
