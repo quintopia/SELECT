@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#SELECT. Interpreter v0.4 by Quintopia
+#SELECT. Language by Por Gammer
+#TODO: run-length encoding for tape, optimize long strings of >,<, >e<s or <e>s into single commands (how to indicate where the pointer was when it broke? mark entire code section? maybe these can't break it?)
+#TODO: also, replace e(<|>)*s and l(<|>)*s with single commands that replicate exptarget and logtarget. (we can't do away with separate exp/log and select completely yet, due to the legality of doing conj,print,etc. before selecting)
 try:
     from Tkinter import * 
 except ImportError:
@@ -10,7 +14,7 @@ from collections import deque
 from itertools import islice
 import optparse
 
-myname = "SELECT. interpreter v0.3"
+myname = "SELECT. interpreter v0.4"
 #create a Tk instance
 master = Tk()
 master.resizable(width = False, height = False)
@@ -271,7 +275,8 @@ def deletepix():
     global pixdict,canv
     canv.delete(ALL)
     pixdict.clear()
-    print("=======Clearing Display=======")
+    if verbose:
+        print("=======Clearing Display=======")
     eventqueue = deque([])                                  #if the screen is cleared, we probably don't want the old events hanging around either
 def getmouse():
     global eventqueue,a,listindex,pointer,waiting
@@ -285,13 +290,13 @@ def loop():
     global a,listindex,pointer,loopdict
     realpart = mpmath.re(a[listindex])
     impart = mpmath.im(a[listindex])
-    if realpart>impart and not mpmath.almosteq(realpart,impart):
+    if mpmath.workdps(mpmath.mp.dps*3/4)(mpmath.chop)(realpart-impart)>0:
         pointer=loopdict[pointer]
 def end():
     global a,listindex,pointer,loopdict
     realpart = mpmath.re(a[listindex])
     impart = mpmath.im(a[listindex])
-    if realpart<=impart or mpmath.almosteq(realpart,impart):
+    if mpmath.workdps(mpmath.mp.dps*3/4)(mpmath.chop)(realpart-impart)<=0:
         pointer=next(key for key,value in loopdict.items() if value==pointer)
 def halt():
     global pointer
@@ -331,8 +336,15 @@ def main():
     except KeyboardInterrupt,SystemExit:
         print('Program terminated by user while executing instruction '+str(pointer))
         print(greporig(pointer))
+        quit()
     except:
         raise
 master.after_idle(main)
-mainloop()
-
+try:
+    mainloop()
+except KeyboardInterrupt,SystemExit:
+    print('Program terminated by user while executing instruction '+str(pointer))
+    print(greporig(pointer))
+    quit()
+except:
+    raise
