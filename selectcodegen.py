@@ -186,7 +186,7 @@ def writetofile(filename):
         sys.exit()
     theFile = openfile.write(s)
     openfile.close()
-    s=''
+    l=[]
     
 def startleftgr():
     if dike:
