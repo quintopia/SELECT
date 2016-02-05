@@ -22,6 +22,8 @@ master.title(myname)
 
 parser = optparse.OptionParser(description=myname+" by Quintopia. SELECT. Language by Por Gammer.", usage="%prog [options] <filename>")
 parser.add_option('-v', '--verbose', help="Turn on verbose output.", dest="verbose", action="store_true", default=False)
+parser.add_option('-d', '--debug', help="Print out all of memory after every cycle.", dest="debug", action="store_true", default=False)
+parser.add_option('-m', help="Write back a minified version of the program instead of executing it.", dest="minify", action="store_true", default=False)
 parser.add_option('-k', help="Set the tape initialization value.", metavar="<value>", action="store", dest="val", type=float, default=1)
 parser.add_option('-p', help="Set the precision of arithmetic.", metavar="<value>", action="store", dest="precision", type=int, default=100)
 (options, args) = parser.parse_args()
@@ -38,18 +40,7 @@ else:
     theFile = openfile.read()
     origFile=theFile
     openfile.close()
-#set precision and default value
-#pick a random fill value (very close to 1 to protect against rounding errors when doing things like k^(k^n) )
-if options.val==1:
-    val = mpmath.mpf(random.uniform(1,1.0000001))
-else:
-    val = mpmath.mpmathify(options.val)
-
-mpmath.mp.dps=options.precision
-verbose=options.verbose
-if verbose:
-    print("Using tape value: "+mpmath.nstr(val))
-
+    
 #get Canvas dimensions from file, dike them out, create the canvas
 pattern = re.compile(r"""\(\s*(?P<x>[0-9]+?)\s*
                           ,\s*(?P<y>[0-9]+?)\s*
@@ -69,10 +60,6 @@ h = y*z
 centerx = (x+1)/2
 centery = (y+1)/2
 theFile = theFile.replace(match.group(),"")
-if verbose:
-    print("Width: "+str(w)+" Height: "+str(h))
-canv = Canvas(master, width=w, height=h, background="white")
-canv.pack()
 
 #replace all commands with single character for ease of parsing
 theFile = theFile.replace("\n","")
@@ -95,6 +82,44 @@ theFile = theFile.replace('HALT.','<<<$h%>>>')
 theFile = re.sub('%>>>.*?<<<\$','',theFile)
 theFile = re.sub('%>>>.*?$','',theFile)
 theFile = re.sub('^.*?<<<\$','',theFile)
+
+if options.minify:
+    with open(filename,'w') as openfile:
+        for c in theFile:
+            if c=='s': openfile.write("SELECT.")
+            elif c=='e': openfile.write("EXP.")
+            elif c=='l': openfile.write("LOG.")
+            elif c=='<': openfile.write("LEFT.")
+            elif c=='>': openfile.write("RIGHT.")
+            elif c=='*': openfile.write("CONJ.")
+            elif c=='[': openfile.write("LOOP.")
+            elif c==']': openfile.write("END.")
+            elif c=='.': openfile.write("PRINT.")
+            elif c==',': openfile.write("GET.")
+            elif c=='X': openfile.write("CLEAR.")
+            elif c=='c': openfile.write("COLOR.")
+            elif c=='h': openfile.write("HALT.")
+    sys.exit(0)
+            
+#set precision and default value
+#pick a random fill value (very close to 1 to protect against rounding errors when doing things like k^(k^n) )
+if options.val==1:
+    val = mpmath.mpf(random.uniform(1,1.0000001))
+else:
+    val = mpmath.mpmathify(options.val)
+
+mpmath.mp.dps=options.precision
+verbose=options.verbose
+if verbose:
+    print("Using tape value: "+mpmath.nstr(val))
+
+
+if verbose:
+    print("Width: "+str(w)+" Height: "+str(h))
+canv = Canvas(master, width=w, height=h, background="white")
+canv.pack()
+
+
 
 #waiting for input
 waiting = False
@@ -330,6 +355,13 @@ def main():
                 master.after(1,main)
                 cycles=0
             cycles+=1
+            if options.debug:
+                sys.stdout.write(c)
+                if c in ['s',',','*']:
+                    sys.stdout.write('\n')
+                    for n in a:
+                        sys.stdout.write(mpmath.nstr(n,4)+", ")
+                    sys.stdout.write('\n')
         elif pointer>=len(theFile):
             #TODO:this should really be a dialog saying the program is done, rerun it or quit?
             master.after(3000,quit)

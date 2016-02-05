@@ -9,11 +9,11 @@
 # sufficiently many unclobbered cells to the right of the current cell.
 # See comments inside individual generating functions for info on which cells need to be untouched, which are clobbered,
 # and what values they contain upon algorithm completion.
-# To use a left-growing algorithm instead, use leftgr(). 
-# E.g.: leftgr(add) writes out a left-growing addition algorithm with the sum leftmost
+# To use a left-growing algorithm instead, use startleftgr() and endleftgr(). 
+# E.g.: startleftgr();add();endleftgr() writes out a left-growing addition algorithm with the sum leftmost
 
-#TODO: update docs for: switch, drawStringLiteral, drawLetterXY, drawdigitXY
-#TODO: divmod
+#TODO: update docs for: switch, drawStringLiteral, drawLetterXY, drawdigitXY, repeat, endRepeat
+#TODO: test intdiv and mod
 
 
 from re import sub,DOTALL,finditer
@@ -35,6 +35,8 @@ leftloc=0
 indentlevel=0
 #a table of named tape locations
 vardict = {}
+#a list of variables that MUST be saved by a loop (e.g. internal variables created by a loop)
+mustsave = []
 #the "absolute" location of the tape head (maybe)
 offset = 0
 #set to True to prevent any code output. set by turnon() and turnoff()
@@ -177,7 +179,7 @@ def writetofile(filename):
     s = sub('\*%(?P<comment>.*)%\*','\g<comment>',s)
     s = sub('\n\n','\n \n',s) #so we can post these to the wiki easily
     
-    s+='\n######GENERATION CODE######'+code+'\n'
+    s+='\n######GENERATION CODE######'+code
     
     try:
         openfile = file(filename+'.sel',"w")
@@ -532,8 +534,8 @@ def halt():
 ################################################LOOPING############################################
 #TODO: Test loops with their counts stored on tape.
 #TODO: Test (bounded and simple) loops with the auto-fetching savelist
-def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
-    global l,dike
+def loop(name,start=0,end=None,step=1,computei=False,savelist=[]):
+    global l,dike,mustsave
     if dike:
         return
     #input: [(k) | (x) k] k k k k k k k k k k k k k k k k k k k {k k k k {k k} {k k k k {k k k}}} (20,24/26,28/30,31/33)k's
@@ -568,6 +570,7 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
     multiply(-6)
     #1/sqrt(2) -1 1/2 i k^i k^-1 -1+i ((-1+i)/sqrt(2)) k
     var(name+'sentinel')
+    mustsave.append(name+'sentinel')
     go(1)
     makeneg1()
     go(1)
@@ -585,8 +588,22 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
     go(2)
     multiply()
     var(name+'step')
+    mustsave.append(name+'step')
     #...-1 1/n 1/2 i^(1/n) k (k*i^(1/n)) k
-    if savelist is not None:
+    if len(mustsave)>2:
+        go(1)
+        for varname in mustsave:
+            if varname!=name+'sentinel' and varname!=name+'step':
+                fetch(varname)
+                var(varname)
+                go(1)
+        if savelist:
+            go(-1)
+        else:
+            go(1)
+            fetch(name+'step')
+            var(name+'step')
+    if savelist:
         go(1)
         for varname in savelist:
             fetch(varname)
@@ -595,10 +612,10 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
         go(1) #leave a gap for where the old sentinel will be fetched in endloop
         fetch(name+'step')
         var(name+'step')
-    #invalidate all variables which are not being saved (as looping will make their offsets wrong anyway)
-    for key in savelist:
-        if key not in savelist and key!=name+'step' and key!=name+'sentinel':
-            del vardict[key]
+        #invalidate all variables which are not being saved (as looping will make their offsets wrong anyway)
+        for key in vardict.keys():
+            if key not in savelist and key not in mustsave:
+                del vardict[key]
     go(1)
     fetch(name+'sentinel')
     var(name+'sentinel')
@@ -621,22 +638,19 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=None):
         if start>0:
             go(1)
             makenum(start)
-            go(-1)
-            add()
+            add(-1)
             #...loopcount {step loopcount*step} start k^(loopcount*step) k^start (i) k
-        elif start<0:
+        else:
             go(1)
-            makeneg(-start)
-            go(1)
-            copyfrom(-5)
-            go(-1)
-            add()
+            makenum(start)
+            #...loopcount {step loopcount*step} -1 (start)
+            add(-2)
+            #...loopcount {step loopcount*step} -1 start k^(loopcount*step) k^start (i) k
 
-            #...loopcount {step loopcount*step} 2 -1 -start start loopcount*step k^start k^loopcount*step (i) sentinel step i k
     #do not down indent. that is in endloop()
     
-def endloop(name,computei=False,start=0,savelist=None):
-    global l,dike
+def endloop(name,computei=False,start=0,savelist=[]):
+    global l,dike,mustsave
     if dike:
         return
     #input: (k) k k k {k k k k k {k k k k {k k k k}}} (4,9,13,17)k's
@@ -645,7 +659,15 @@ def endloop(name,computei=False,start=0,savelist=None):
        #...(i) k                                                                            ...start=0
        #...loopcount*step start k^(loopcount*step) k^start (i) k                            ...start>0
        #...loopcount*step 2 -1 -start start loopcount*step k^start k^loopcount*step (i) k   ...start<0
-    if savelist is not None:
+    del mustsave[mustsave.index(name+"sentinel")]
+    del mustsave[mustsave.index(name+"step")]
+    go(1)
+    if mustsave:
+        for varname in mustsave:
+            fetch(varname)
+            var(varname)
+            go(1)
+    if savelist:
         for varname in savelist:
             fetch(varname)
             var(varname)
@@ -676,7 +698,7 @@ def endloop(name,computei=False,start=0,savelist=None):
             #...loopcount step loopcount*step start k^(loopcount*step) k^start (i) k
         elif start<0:
             go(1)
-            makeneg(-start)
+            makenum(-start)
             go(1)
             copyfrom(-5)
             go(-1)
@@ -686,34 +708,58 @@ def endloop(name,computei=False,start=0,savelist=None):
     comment('END OF LOOP '+name)
     downindent()
 
-def repeat(savelist=None):
-    global l,dike
+def repeat(name,savelist=[]):
+    global l,dike,mustsave
     if dike:
         return
     upindent()
     comment("WHILE")
-    if savelist is not None:
-        var("repeatsentinel")
+    var(name+"sentinel")
+    mustsave.append(name+"sentinel")
+    if len(mustsave)>1:
         go(1)
+        for varname in mustsave:
+            if varname!=name+"sentinel":
+                fetch(varname)
+                var(varname)
+                go(1)
+        if savelist:
+            go(-1)
+        else:
+            fetch(name+"sentinel")
+    if savelist:
+        go(1)
+        
         for varname in savelist:
             fetch(varname)
             var(varname)
             go(1)
-        fetch("repeatsentinel")
+        fetch(name+"sentinel")
     l.append("LOOP. ")
 
-def endrepeat(savelist=None):
+def endrepeat(name,savelist=[]):
     global l,dike
     if dike:
         return
-    if savelist is not None:
-        var("repeatsentinel")
+    del mustsave[mustsave.index(name+"sentinel")]
+    var(name+"sentinel")
+    if mustsave:
+        go(1)
+        for varname in mustsave:
+            fetch(varname)
+            var(varname)
+            go(1)
+        if savelist:
+            go(-1)
+        else:
+            fetch(name+"sentinel")
+    if savelist:
         go(1)
         for varname in savelist:
             fetch(varname)
             var(varname)
             go(1)
-        fetch("repeatsentinel")
+        fetch(name+"sentinel")
     l.append("END. ")
     comment("END WHILE")
     downindent()
@@ -1576,6 +1622,51 @@ def arg():
     comment('END ARGUMENT')
     #x 1/2 x* 1/|x| -i logK(x/|x|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(x/|x|) (arg(x)) k
     downindent()
+
+def mod(target=1):
+    global dike
+    #input (x) y [20 k's] or y .... (x) [21 k's]
+    #output x y 1/y 2 2/y 1/((-1)^(2/y)) p=x*(-1)^(2/y) 1/2 p* 1/|x| -i logK(p/|p|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(p/|p|) arg(p) (x%y) k
+    if dike:
+        return
+    upindent()
+    comment('MODULUS:')
+    go(1)
+    if target!=1:
+        copyfrom(target)
+    reciprocal()
+    go(1)
+    makenum(2)
+    multiply(-1)
+    go(1)
+    makeneg1()
+    exptarget(-1)
+    go(1)
+    multiply(-5)
+    arg()
+    go(-14)
+    exptarget(9)
+    go(5)
+    multiply(-14)
+    comment('END MODULUS')
+    downindent()
+
+def intdiv(target=1):
+    global dike
+    #input (x) y [25 k's] or y ... (x) [26 k's]
+    #output x y 1/y 2 2/y 1/((-1)^(2/y)) p=x*(-1)^(2/y) 1/2 p* 1/|x| -i logK(p/|p|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(p/|p|) arg(p) x%y -(x%y) k^-(x%y) k^x x-x%y (x//y) k
+    if dike:
+        return
+    upindent()
+    comment('INTEGER DIVISION:')
+    mod(target)
+    opposite()
+    add(-21)
+    multiply(-22)
+    comment('END INTEGER DIVISION')
+    downindent()
+    
+    
 
 def sin(hyperbolic=False):
     global dike
