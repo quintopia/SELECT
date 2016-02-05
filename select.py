@@ -14,7 +14,7 @@ from collections import deque
 from itertools import islice
 import optparse
 
-myname = "SELECT. interpreter v0.4"
+myname = "SELECT. interpreter v0.5"
 #create a Tk instance
 master = Tk()
 master.resizable(width = False, height = False)
@@ -85,6 +85,7 @@ theFile = re.sub('^.*?<<<\$','',theFile)
 
 if options.minify:
     with open(filename,'w') as openfile:
+        openfile.write("(%d,%d,%d)"%(x,y,z))
         for c in theFile:
             if c=='s': openfile.write("SELECT.")
             elif c=='e': openfile.write("EXP.")

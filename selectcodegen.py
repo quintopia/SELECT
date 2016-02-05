@@ -772,7 +772,7 @@ def endrepeat(name,savelist=[]):
 
 ##############################################CONDITIONALS##################################################
 def ifnonpositive(name):
-    global l,dike
+    global l,dike,mustsave
     if dike:
         return
     #x must be a real number!
@@ -782,6 +782,7 @@ def ifnonpositive(name):
     comment('IF ('+name+'):')
     l.append('LOOP. ')
     var('ifstart'+name)
+    mustsave.append('ifstart'+name)
     upindent()
     #no downindent
     
@@ -807,6 +808,7 @@ def els(name,copy=True):
         padpoint(1,name)
     go(1)
     var('ifone'+name)
+    mustsave.append('ifone'+name)
     go(1)
     makezero()
     go(-1)
@@ -819,6 +821,7 @@ def els(name,copy=True):
     #THE OFFSET HERE WOULD BE THE SAME AS THE OFFSET AT THE BEGINNING OF THE FIRST IF BLOCK PLUS 2 (since only one of the two will be executed)
     offset+=getoffset('ifstart'+name)+2
     var('ifelse'+name)
+    mustsave.append('ifelse'+name)
     upindent()
     if copy:
         go(1)
@@ -862,6 +865,9 @@ def endif(name):
     downindent()
     l.append('END. ')
     go(1)
+    del mustsave[mustsave.index('ifstart'+name)]
+    del mustsave[mustsave.index('ifone'+name)]
+    del mustsave[mustsave.index('ifelse'+name)]
     comment('END IF ('+name+')')
     downindent()
     
