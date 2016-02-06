@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#SELECT. Code Generator v0.5 by Quintopia
+#SELECT. Code Generator v0.6 by Quintopia
 # All code-generating functions in this file are right-growing, meaning they make the following guarantees:
 # * They do not read or write cells to the left of the current cell at call time.
 # * The result that the algorithm computes will be contained in the rightmost cell clobbered by the algorithm.
@@ -12,15 +12,14 @@
 # To use a left-growing algorithm instead, use startleftgr() and endleftgr(). 
 # E.g.: startleftgr();add();endleftgr() writes out a left-growing addition algorithm with the sum leftmost
 
-#TODO: update docs for: switch, drawStringLiteral, drawLetterXY, drawdigitXY, repeat, endRepeat
-#TODO: test intdiv and mod
+#TODO: update docs for: switch, drawStringLiteral, drawLetterXY, drawdigitXY, repeat, endRepeat, opposite, reciprocal, intdiv, mod
 
 
 from re import sub,DOTALL,finditer
 from itertools import dropwhile,islice
 import sys
 
-version = 0.5
+version = 0.6
 #the list of strings that becomes the program
 l=[]
 #the height of the display
@@ -162,9 +161,9 @@ def writetofile(filename):
     oldstring=s
     while True:
         oldstring=s
-        s=sub('(?s)LEFT\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)RIGHT\. ','\g<comment>',s)
-        s=sub('(?s)RIGHT\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)LEFT\. ','\g<comment>',s)
-        s=sub('(?s)CONJ\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)CONJ\.','\g<comment>',s)
+        s=sub('(?s)LEFT\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)\s*RIGHT\. ','\g<comment>',s)
+        s=sub('(?s)RIGHT\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)\s*LEFT\. ','\g<comment>',s)
+        s=sub('(?s)CONJ\.(?P<comment>(?:(?=(?P<tmp>\s*\*%.*?%\*\s*))(?P=tmp))*)\s*CONJ\.','\g<comment>',s)
         if oldstring==s:
             break
     #find last occurrence of (END. |PRINT. )
@@ -640,7 +639,7 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=[]):
             makenum(start)
             add(-1)
             #...loopcount {step loopcount*step} start k^(loopcount*step) k^start (i) k
-        else:
+        elif start<0:
             go(1)
             makenum(start)
             #...loopcount {step loopcount*step} -1 (start)
@@ -835,14 +834,14 @@ def endif(name):
     #output: (x) k 
     #if an else branch wasn't needed for program logic but the tapehead moved, insert one anyway just to prevent tape usage differing depending on conditional result
     if 'ifelse'+name not in vardict and getoffset('ifstart'+name)!=0:
-        els(name,False)
+        els(name,True)
     #no padding necessary if there is no else block and the tape head did not move
     if 'ifelse'+name in vardict:
         #calculate displacement of first branch
         b1length = getoffset('ifone'+name)-getoffset('ifstart'+name)
         if 'PADPOINT2'+name not in l:
             padpoint(2,name)
-        go(1)
+        #go(1)
         #calculate displacement of second branch
         b2length = -getoffset('ifelse'+name)
         #output rights
@@ -854,7 +853,7 @@ def endif(name):
             l[pp]='({'+'RIGHT. '*padlength+'})'
             pp=_rindex(l,'PADPOINT2'+name)
             del l[pp]
-        else:
+        elif b1length>b2length:
             #insert rights at padpoint2
             padlength=b1length-b2length
             offset+=padlength
@@ -862,9 +861,13 @@ def endif(name):
             l[pp]='({'+'RIGHT. '*padlength+'})'
             pp=_rindex(l,'PADPOINT1'+name)
             del l[pp]
+        else:
+            pp=_rindex(l,'PADPOINT2'+name)
+            del l[pp]
+            pp=_rindex(l,'PADPOINT1'+name)
+            del l[pp]
     downindent()
     l.append('END. ')
-    go(1)
     del mustsave[mustsave.index('ifstart'+name)]
     del mustsave[mustsave.index('ifone'+name)]
     del mustsave[mustsave.index('ifelse'+name)]
@@ -1333,8 +1336,8 @@ def multiply(target=1,target2=0):
     #input: y ... (x) k k or (x) k k ... y
     #output: y ... x (x*y) k or x (x*y) k ... y
     #target2!=0:
-    #input: y...x ...(k) k or (k) k ... y ... x (or x and y flipped)
-    #output: y...x...(x*y) k or (x*y) k ... y ... x (etc.)
+    #input: y...x ...(k) k or (k) k ... y ... x
+    #output: y...x...(x*y) k or (x*y) k ... y ... x
     if dike:
         return
     upindent()
@@ -1439,10 +1442,10 @@ def dec():
     go(2)
     downindent()
 
-#cannot reciprocal 1 (or 0, duh)
+#cannot reciprocal 1 or -1 (or 0, duh)
 def reciprocal():
     global dike
-    #this only works if x!=1! obviously, in that case you needn't be reciprocating anyway, but if you can't guarantee it, do x^-1 manually instead
+    #this only works if x!=±1! obviously, in that case you needn't be reciprocating anyway, but if you can't guarantee it, do x^-1 manually instead
     #input (x) k k
     #output x (1/x) k
     if dike:
@@ -1460,6 +1463,7 @@ def reciprocal():
 
 def opposite():
     global dike
+    #since this depends on reciprocal, you can't use it on ±1
     #input (x) k k
     #output x (-x) k
     if dike:
@@ -1468,6 +1472,7 @@ def opposite():
     comment('(opposite)')
     reciprocal()
     #x (1/x) k
+    output()
     exptarget(-1)
     #(x) x^-x k
     go(1)
@@ -1631,15 +1636,16 @@ def arg():
 
 def mod(target=1):
     global dike
-    #input (x) y [20 k's] or y .... (x) [21 k's]
-    #output x y 1/y 2 2/y 1/((-1)^(2/y)) p=x*(-1)^(2/y) 1/2 p* 1/|x| -i logK(p/|p|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(p/|p|) arg(p) (x%y) k
+    #will not work if the dividend is ±1 (but you should know the answer in that case)
+    #input (x) y [19 k's] or y .... (x) [20 k's]
+    #output x y 1/y 2 2/y (-1)^(2/y) x%y{-x?} -1 -x%y{+x?} k 1|k 0|k y|x%y k^y|k k^(x%y-x)|k x%y k 0|1 k (x%y) k
     if dike:
         return
     upindent()
     comment('MODULUS:')
     go(1)
     if target!=1:
-        copyfrom(target)
+        copyfrom(target-1)
     reciprocal()
     go(1)
     makenum(2)
@@ -1647,28 +1653,39 @@ def mod(target=1):
     go(1)
     makeneg1()
     exptarget(-1)
+    go(2)
+    copyfrom(-1)
+    exptarget(-6)
+    go(6)
+    logtarget(-1)
+    go(2)
+    makeneg1()
+    multiply(-1)
+    ifnonpositive("fliptest")
+    go(7)
+    copyfrom(-9)
+    els("fliptest")
     go(1)
-    multiply(-5)
-    arg()
-    go(-14)
-    exptarget(9)
-    go(5)
-    multiply(-14)
+    copyfrom(-11)
+    add(-6)
+    endif("fliptest")
+    go(1)
+    copyfrom(-4)
     comment('END MODULUS')
     downindent()
 
 def intdiv(target=1):
     global dike
-    #input (x) y [25 k's] or y ... (x) [26 k's]
-    #output x y 1/y 2 2/y 1/((-1)^(2/y)) p=x*(-1)^(2/y) 1/2 p* 1/|x| -i logK(p/|p|) 3.09485e+26 2 -1 3.23117e-27 k^(3.23117e-27) 1/logK(e) ln(p/|p|) arg(p) x%y -(x%y) k^-(x%y) k^x x-x%y (x//y) k
+    #input (x) y [19 k's] or y ... (x) [20 k's]
+    #output x y 1/y 2 2/y (-1)^(2/y) x%y{-x?} -1 -x%y{+x?} k 1|k 0|k y|x%y k^y|k k^(x%y-x)|k x%y k 0|1 k x%y -(x%y) k^-(x%y) k^x x-x%y (x//y) k
     if dike:
         return
     upindent()
     comment('INTEGER DIVISION:')
     mod(target)
-    opposite()
-    add(-21)
-    multiply(-22)
+    multiply(-12)
+    add(-20)
+    multiply(-21)
     comment('END INTEGER DIVISION')
     downindent()
     
