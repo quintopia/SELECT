@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-#SELECT. Interpreter v0.4 by Quintopia
+#SELECT. Interpreter v0.6 by Quintopia
 #SELECT. Language by Por Gammer
-#TODO: run-length encoding for tape, optimize long strings of >,<, >e<s or <e>s into single commands (how to indicate where the pointer was when it broke? mark entire code section? maybe these can't break it?)
-#TODO: also, replace e(<|>)*s and l(<|>)*s with single commands that replicate exptarget and logtarget. (we can't do away with separate exp/log and select completely yet, due to the legality of doing conj,print,etc. before selecting)
 try:
     from Tkinter import * 
 except ImportError:
@@ -10,11 +8,11 @@ except ImportError:
 import mpmath
 import sys,os
 import re,random
-from collections import deque
-from itertools import islice
+from collections import deque,defaultdict
+from itertools import islice,repeat
 import optparse
 
-myname = "SELECT. interpreter v0.5"
+myname = "SELECT. interpreter v0.6"
 #create a Tk instance
 master = Tk()
 master.resizable(width = False, height = False)
@@ -101,6 +99,20 @@ if options.minify:
             elif c=='c': openfile.write("COLOR.")
             elif c=='h': openfile.write("HALT.")
     sys.exit(0)
+    
+#optimizations
+for m in re.findall(r"(e(>+)s)",theFile):
+    theFile = theFile.replace(m[0],"f"+str(len(m[1])),1)
+for m in re.findall(r"(e(<+)s)",theFile):
+    theFile = theFile.replace(m[0],"g"+str(len(m[1])),1)
+for m in re.findall(r"(l(>+)s)",theFile):
+    theFile = theFile.replace(m[0],"m"+str(len(m[1])),1)
+for m in re.findall(r"(l(<+)s)",theFile):
+    theFile = theFile.replace(m[0],"n"+str(len(m[1])),1)
+for m in re.findall(r"<{2,}",theFile):
+    theFile = theFile.replace(m,"{"+str(len(m)),1)
+for m in re.findall(r">{2,}",theFile):
+    theFile = theFile.replace(m,"}"+str(len(m)),1)
             
 #set precision and default value
 #pick a random fill value (very close to 1 to protect against rounding errors when doing things like k^(k^n) )
@@ -138,7 +150,7 @@ argindex=0
 listindex=0
 
 #the list data structure
-a=[val]
+a=defaultdict(repeat(val).next)
 
 #instruction pointer
 pointer=0
@@ -176,7 +188,6 @@ canv.bind("<B1-Motion>",click)
 #create loop point dictionary
 brackstack = []
 loopdict = {}
-theFile = list(theFile)
 for i in range(len(theFile)):
     if theFile[i]=='[':
         brackstack.append(i)
@@ -251,6 +262,40 @@ def select():
             a[argindex]=mpmath.mpc(0,mpmath.im(a[argindex]))
         a[argindex]=mpmath.chop(a[argindex],tol)
     oparg=0
+def expright():
+    global a,pointer,listindex
+    num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
+    pointer+=len(num)
+    a[listindex] = mpmath.power(a[listindex],a[listindex+int(num)])
+    listindex+=int(num)
+def expleft():
+    global a,pointer,listindex
+    num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
+    pointer+=len(num)
+    a[listindex] = mpmath.power(a[listindex],a[listindex-int(num)])
+    listindex-=int(num)
+def logright():
+    global a,pointer,listindex
+    num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
+    pointer+=len(num)
+    a[listindex] = mpmath.log(a[listindex],a[listindex+int(num)])
+    listindex+=int(num)
+def logleft():
+    global a,pointer,listindex
+    num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
+    pointer+=len(num)
+    a[listindex] = mpmath.log(a[listindex],a[listindex-int(num)])
+    listindex-=int(num)
+def repright():
+    global pointer,listindex
+    num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
+    pointer+=len(num)
+    listindex+=int(num)
+def repleft():
+    global pointer,listindex
+    num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
+    pointer+=len(num)
+    listindex-=int(num)
 def exp():
     global lastop,argindex,listindex
     lastop = 1
@@ -262,16 +307,9 @@ def log():
     argindex=listindex
 def left():
     global listindex,a,val,lastop,argindex
-    if listindex==0:
-        a.insert(0,val)
-        if lastop>0:
-            argindex+=1
-    else:
-        listindex-=1
+    listindex-=1
 def right():
     global listindex,a,val
-    if listindex==len(a)-1:
-        a.append(val)
     listindex+=1
 def conj():
     global a,listindex
@@ -341,6 +379,12 @@ commands = {'s': select,
             'X': deletepix,
             'c': color,
             'h': halt,
+            'f': expright,
+            'g': expleft,
+            'm': logright,
+            'n': logleft,
+            '{': repleft,
+            '}': repright
 }
 def main():
     #start the eval loop

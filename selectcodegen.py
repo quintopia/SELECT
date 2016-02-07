@@ -531,8 +531,6 @@ def halt():
 
 
 ################################################LOOPING############################################
-#TODO: Test loops with their counts stored on tape.
-#TODO: Test (bounded and simple) loops with the auto-fetching savelist
 def loop(name,start=0,end=None,step=1,computei=False,savelist=[]):
     global l,dike,mustsave
     if dike:
@@ -574,7 +572,7 @@ def loop(name,start=0,end=None,step=1,computei=False,savelist=[]):
     makeneg1()
     go(1)
     if end is None:
-        copyFrom(-10)
+        copyfrom(-10)
     else:
         makenum((end-start)/step)
     #...-1 (n) k
@@ -813,12 +811,12 @@ def els(name,copy=True):
     go(-1)
     downindent()
     l.append('END. ')
+    #THE OFFSET HERE WOULD BE THE SAME AS THE OFFSET AT THE BEGINNING OF THE FIRST IF BLOCK (since only one of the two will be executed)
+    offset+=getoffset('ifstart'+name)
     go(1)
     lnot()
     comment('ELSE ('+name+'):')
     l.append('LOOP. ')
-    #THE OFFSET HERE WOULD BE THE SAME AS THE OFFSET AT THE BEGINNING OF THE FIRST IF BLOCK PLUS 2 (since only one of the two will be executed)
-    offset+=getoffset('ifstart'+name)+2
     var('ifelse'+name)
     mustsave.append('ifelse'+name)
     upindent()
@@ -848,7 +846,6 @@ def endif(name):
         if b2length>b1length:
             #this branch is further right. insert rights at padpoint1
             padlength=b2length-b1length
-            offset+=padlength
             pp=_rindex(l,'PADPOINT1'+name)
             l[pp]='({'+'RIGHT. '*padlength+'})'
             pp=_rindex(l,'PADPOINT2'+name)
@@ -908,9 +905,12 @@ def switch(name,n,f,fetchx=False):
     #we'll start with the test case for zero. it won't change much except the tape use profile. it needs to be padded too. but wait...it gets auto-padded already.
     #create the test sentinel and step just like the one for loop()
     ifzero("switchbigcond"+name)
+    comment("CASE ("+name+") #0:")
     if not fetchx:
         go(1)
     f(0)
+    print offset
+    comment("END CASE ("+name+") #0")
     els("switchbigcond"+name)
     var(name+'X')
     go(1)
@@ -935,13 +935,11 @@ def switch(name,n,f,fetchx=False):
     go(3)
     exptarget(-1)
     go(1)
-    #outputleft(9)
     startpoint=getoffset()
     for k in range(1,n):
         l.append('LOOP. ')
         upindent()
         comment('CASE ('+name+') #'+str(k)+':')
-        offset=startpoint
         go(1)
         if fetchx:
             fetch(name+'X')
@@ -952,9 +950,11 @@ def switch(name,n,f,fetchx=False):
         #make sure that none of the cases after this one will run.
         makeone()
         offsets.append(getoffset()-startpoint)
+        print getoffset()
         comment('END CASE ('+name+') #'+str(k))
         downindent()
         l.append('END. ')
+        offset=startpoint
         exptarget(-1)
         go(1)
         #if something has run: x 1/x -1 2^(1/x) i^(1/4) {...} (1) k
@@ -964,7 +964,6 @@ def switch(name,n,f,fetchx=False):
     l.append('LOOP. ')
     upindent()
     comment('DEFAULT CASE:')
-    startpoint=getoffset()
     go(1)
     if fetchx:
         fetch('switch'+name+'X')
@@ -973,22 +972,26 @@ def switch(name,n,f,fetchx=False):
         padpoint(n-1,name)
     go(1)
     offsets.append(getoffset()-startpoint)
+    print getoffset()
     comment('END DEFAULT CASE')
     downindent()
     l.append('END. ')
-    #if something has run: x 1/x -1 2^(1/x) i^(1/4) {...} (1) k
-    #if something has not run: x 1/x -1 2^(1/x) fin^2 {...} (k) k
-    endif("switchbigcond"+name)
     #compute the max tape usage in any branch (we'll pad up to it in other branches)
     maxpad=max(offsets)
     #iterate through and pad too-small branches
-    for k in range(n):
+    for k in range(len(offsets)):
         padlength=maxpad-offsets[k]
         pp=_rindex(l,'PADPOINT'+str(k)+name)
         if padlength>0:
             l[pp]='({'+'RIGHT. '*padlength+'})'
         else:
             del l[pp]
+    offset=startpoint+maxpad
+    print "\n",offset
+    #if something has run: x 1/x -1 2^(1/x) i^(1/4) {...} (1) k
+    #if something has not run: x 1/x -1 2^(1/x) fin^2 {...} (k) k
+    endif("switchbigcond"+name)
+    print offset,"\n"
     comment('END SWITCH ('+name+')')
     downindent()
     
