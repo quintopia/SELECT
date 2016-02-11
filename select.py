@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #SELECT. Interpreter v0.6 by Quintopia
 #SELECT. Language by Por Gammer
+#TODO: make debug output work with optimized code
 try:
     from Tkinter import * 
 except ImportError:
@@ -263,29 +264,37 @@ def select():
         a[argindex]=mpmath.chop(a[argindex],tol)
     oparg=0
 def expright():
-    global a,pointer,listindex
+    global a,pointer,listindex,lastop,argindex
     num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
     pointer+=len(num)
-    a[listindex] = mpmath.power(a[listindex],a[listindex+int(num)])
+    lastop=1
+    argindex = listindex
     listindex+=int(num)
+    select()
 def expleft():
-    global a,pointer,listindex
+    global a,pointer,listindex,lastop,argindex
     num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
     pointer+=len(num)
-    a[listindex] = mpmath.power(a[listindex],a[listindex-int(num)])
+    lastop=1
+    argindex = listindex
     listindex-=int(num)
+    select()
 def logright():
-    global a,pointer,listindex
+    global a,pointer,listindex,lastop,argindex
     num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
     pointer+=len(num)
-    a[listindex] = mpmath.log(a[listindex],a[listindex+int(num)])
+    lastop=2
+    argindex = listindex
     listindex+=int(num)
+    select()
 def logleft():
-    global a,pointer,listindex
+    global a,pointer,listindex,lastop,argindex
     num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
     pointer+=len(num)
-    a[listindex] = mpmath.log(a[listindex],a[listindex-int(num)])
+    lastop=2
+    argindex = listindex
     listindex-=int(num)
+    select()
 def repright():
     global pointer,listindex
     num = re.match(r"\d*",theFile[(pointer+1):]).group(0)

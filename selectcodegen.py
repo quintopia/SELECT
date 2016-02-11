@@ -970,8 +970,9 @@ def switch(name,n,f,fetchx=False):
     f(n)
     if 'PADPOINT'+str(n-1)+name not in l:
         padpoint(n-1,name)
+    
+    offsets.append(getoffset()-startpoint) #?
     go(1)
-    offsets.append(getoffset()-startpoint)
     print getoffset()
     comment('END DEFAULT CASE')
     downindent()
@@ -986,7 +987,7 @@ def switch(name,n,f,fetchx=False):
             l[pp]='({'+'RIGHT. '*padlength+'})'
         else:
             del l[pp]
-    offset=startpoint+maxpad
+    offset=startpoint+maxpad+1
     print "\n",offset
     #if something has run: x 1/x -1 2^(1/x) i^(1/4) {...} (1) k
     #if something has not run: x 1/x -1 2^(1/x) fin^2 {...} (k) k
