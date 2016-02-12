@@ -909,7 +909,6 @@ def switch(name,n,f,fetchx=False):
     if not fetchx:
         go(1)
     f(0)
-    print offset
     comment("END CASE ("+name+") #0")
     els("switchbigcond"+name)
     var(name+'X')
@@ -950,7 +949,6 @@ def switch(name,n,f,fetchx=False):
         #make sure that none of the cases after this one will run.
         makeone()
         offsets.append(getoffset()-startpoint)
-        print getoffset()
         comment('END CASE ('+name+') #'+str(k))
         downindent()
         l.append('END. ')
@@ -973,7 +971,6 @@ def switch(name,n,f,fetchx=False):
     
     offsets.append(getoffset()-startpoint) #?
     go(1)
-    print getoffset()
     comment('END DEFAULT CASE')
     downindent()
     l.append('END. ')
@@ -988,11 +985,9 @@ def switch(name,n,f,fetchx=False):
         else:
             del l[pp]
     offset=startpoint+maxpad+1
-    print "\n",offset
     #if something has run: x 1/x -1 2^(1/x) i^(1/4) {...} (1) k
     #if something has not run: x 1/x -1 2^(1/x) fin^2 {...} (k) k
     endif("switchbigcond"+name)
-    print offset,"\n"
     comment('END SWITCH ('+name+')')
     downindent()
     

@@ -22,7 +22,8 @@ master.title(myname)
 parser = optparse.OptionParser(description=myname+" by Quintopia. SELECT. Language by Por Gammer.", usage="%prog [options] <filename>")
 parser.add_option('-v', '--verbose', help="Turn on verbose output.", dest="verbose", action="store_true", default=False)
 parser.add_option('-d', '--debug', help="Print out all of memory after every cycle.", dest="debug", action="store_true", default=False)
-parser.add_option('-m', help="Write back a minified version of the program instead of executing it.", dest="minify", action="store_true", default=False)
+parser.add_option('-m', '--minify', help="Write back a minified version of the program instead of executing it.", dest="minify", action="store_true", default=False)
+parser.add_option('-0', '--no_opt', help="Turn off optimization.", dest="optimize", action="store_false", default=True)
 parser.add_option('-k', help="Set the tape initialization value.", metavar="<value>", action="store", dest="val", type=float, default=1)
 parser.add_option('-p', help="Set the precision of arithmetic.", metavar="<value>", action="store", dest="precision", type=int, default=100)
 (options, args) = parser.parse_args()
@@ -61,8 +62,8 @@ centery = (y+1)/2
 theFile = theFile.replace(match.group(),"")
 
 #replace all commands with single character for ease of parsing
+sys.stdout.write("Compressing...");sys.stdout.flush()
 theFile = theFile.replace("\n","")
-theFile = theFile.replace(" ","")
 theFile = re.sub('<<<\$.*%>>>','',theFile)
 theFile = theFile.replace('SELECT.','<<<$s%>>>')
 theFile = theFile.replace('EXP.','<<<$e%>>>')
@@ -81,10 +82,12 @@ theFile = theFile.replace('HALT.','<<<$h%>>>')
 theFile = re.sub('%>>>.*?<<<\$','',theFile)
 theFile = re.sub('%>>>.*?$','',theFile)
 theFile = re.sub('^.*?<<<\$','',theFile)
+sys.stdout.write("done.\n")
 
 if options.minify:
     with open(filename,'w') as openfile:
         openfile.write("(%d,%d,%d)"%(x,y,z))
+        sys.stdout.write("Writing golfed file...")
         for c in theFile:
             if c=='s': openfile.write("SELECT.")
             elif c=='e': openfile.write("EXP.")
@@ -99,22 +102,59 @@ if options.minify:
             elif c=='X': openfile.write("CLEAR.")
             elif c=='c': openfile.write("COLOR.")
             elif c=='h': openfile.write("HALT.")
+        sys.stdout.write("done.\n")
     sys.exit(0)
-    
+
 #optimizations
-for m in re.findall(r"(e(>+)s)",theFile):
-    theFile = theFile.replace(m[0],"f"+str(len(m[1])),1)
-for m in re.findall(r"(e(<+)s)",theFile):
-    theFile = theFile.replace(m[0],"g"+str(len(m[1])),1)
-for m in re.findall(r"(l(>+)s)",theFile):
-    theFile = theFile.replace(m[0],"m"+str(len(m[1])),1)
-for m in re.findall(r"(l(<+)s)",theFile):
-    theFile = theFile.replace(m[0],"n"+str(len(m[1])),1)
-for m in re.findall(r"<{2,}",theFile):
-    theFile = theFile.replace(m,"{"+str(len(m)),1)
-for m in re.findall(r">{2,}",theFile):
-    theFile = theFile.replace(m,"}"+str(len(m)),1)
-            
+if options.optimize:
+    newFile = "";i=0
+    sys.stdout.write("Optimizing");sys.stdout.flush()
+    re1 = re.compile(r"e(>+)s")
+    re2 = re.compile(r"e(<+)s")
+    re3 = re.compile(r"l(>+)s")
+    re4 = re.compile(r"l(<+)s")
+    re5 = re.compile(r"<{2,}")
+    re6 = re.compile(r">{2,}")
+    numdots = 1
+    while True:
+        type=0
+        m = re1.search(theFile,pos=i)
+        if m is not None: type = 1
+        m2 = re2.search(theFile,pos=i)
+        if m is None or (m2 is not None and m2.start()<m.start()): m=m2;type = 2
+        m2 = re3.search(theFile,pos=i)
+        if m is None or (m2 is not None and m2.start()<m.start()): m=m2;type = 3
+        m2 = re4.search(theFile,pos=i)
+        if m is None or (m2 is not None and m2.start()<m.start()): m=m2;type = 4
+        m2 = re5.search(theFile,pos=i)
+        if m is None or (m2 is not None and m2.start()<m.start()): m=m2;type = 5
+        m2 = re6.search(theFile,pos=i)
+        if m is None or (m2 is not None and m2.start()<m.start()): m=m2;type = 6
+        if m is not None:
+            newFile += theFile[i:m.start()]
+            if type == 1:
+                newFile += "f"+str(len(m.group(1)))
+            elif type == 2:
+                newFile += "g"+str(len(m.group(1)))
+            elif type == 3:
+                newFile += "m"+str(len(m.group(1)))
+            elif type == 4:
+                newFile += "n"+str(len(m.group(1)))
+            elif type == 5:
+                newFile += "{"+str(len(m.group(0)))
+            elif type == 6:
+                newFile += "}"+str(len(m.group(0)))
+            else:
+                assert False
+            i=m.end()
+            if i > numdots*len(theFile)/6:
+                sys.stdout.write(".");sys.stdout.flush()
+                numdots+=1
+        else:
+            theFile = newFile + theFile[i:]
+            sys.stdout.write("done.\n")
+            break
+
 #set precision and default value
 #pick a random fill value (very close to 1 to protect against rounding errors when doing things like k^(k^n) )
 if options.val==1:
