@@ -14,10 +14,7 @@ from itertools import islice,repeat
 import optparse
 
 myname = "SELECT. interpreter v0.6"
-#create a Tk instance
-master = Tk()
-master.resizable(width = False, height = False)
-master.title(myname)
+
 
 parser = optparse.OptionParser(description=myname+" by Quintopia. SELECT. Language by Por Gammer.", usage="%prog [options] <filename>")
 parser.add_option('-v', '--verbose', help="Turn on verbose output.", dest="verbose", action="store_true", default=False)
@@ -27,10 +24,12 @@ parser.add_option('-0', '--no_opt', help="Turn off optimization.", dest="optimiz
 parser.add_option('-k', help="Set the tape initialization value.", metavar="<value>", action="store", dest="val", type=float, default=1)
 parser.add_option('-p', help="Set the precision of arithmetic.", metavar="<value>", action="store", dest="precision", type=int, default=100)
 (options, args) = parser.parse_args()
+
 #open and load file
 if len(args)<1:
     parser.error('Please specify the filename of the SELECT. program to be run.')
 filename = args[0]
+sys.stdout.write("Reading file...");sys.stdout.flush()
 try:
     openfile = open(filename,"r")
 except IOError:
@@ -40,7 +39,7 @@ else:
     theFile = openfile.read()
     origFile=theFile
     openfile.close()
-    
+
 #get Canvas dimensions from file, dike them out, create the canvas
 pattern = re.compile(r"""\(\s*(?P<x>[0-9]+?)\s*
                           ,\s*(?P<y>[0-9]+?)\s*
@@ -60,6 +59,7 @@ h = y*z
 centerx = (x+1)/2
 centery = (y+1)/2
 theFile = theFile.replace(match.group(),"")
+sys.stdout.write("done.\n")
 
 #replace all commands with single character for ease of parsing
 sys.stdout.write("Compressing...");sys.stdout.flush()
@@ -154,6 +154,12 @@ if options.optimize:
             theFile = newFile + theFile[i:]
             sys.stdout.write("done.\n")
             break
+
+#create a Tk instance
+sys.stdout.write("Preparing interface...");sys.stdout.flush()
+master = Tk()
+master.resizable(width = False, height = False)
+master.title(myname)
 
 #set precision and default value
 #pick a random fill value (very close to 1 to protect against rounding errors when doing things like k^(k^n) )
@@ -303,8 +309,14 @@ def select():
             a[argindex]=mpmath.mpc(0,mpmath.im(a[argindex]))
         a[argindex]=mpmath.chop(a[argindex],tol)
     oparg=0
+def repexpright():
+    global a,pointer,listindex
+    pass
+def repexpleft():
+    global a,pointer,listindex
+    pass
 def expright():
-    global a,pointer,listindex,lastop,argindex
+    global pointer,listindex,lastop,argindex
     num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
     pointer+=len(num)
     lastop=1
@@ -312,7 +324,7 @@ def expright():
     listindex+=int(num)
     select()
 def expleft():
-    global a,pointer,listindex,lastop,argindex
+    global pointer,listindex,lastop,argindex
     num = re.match(r"\d*",theFile[(pointer+1):]).group(0)
     pointer+=len(num)
     lastop=1
@@ -465,6 +477,7 @@ def main():
         quit()
     except:
         raise
+sys.stdout.write("done.\n");sys.stdout.flush()
 master.after_idle(main)
 try:
     mainloop()
