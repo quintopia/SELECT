@@ -86,8 +86,9 @@ sys.stdout.write("done.\n")
 
 if options.minify:
     with open(filename,'w') as openfile:
+        sys.stdout.write("Writing golfed file...");sys.stdout.flush()
         openfile.write("(%d,%d,%d)"%(x,y,z))
-        sys.stdout.write("Writing golfed file...")
+        i=0
         for c in theFile:
             if c=='s': openfile.write("SELECT.")
             elif c=='e': openfile.write("EXP.")
@@ -102,6 +103,8 @@ if options.minify:
             elif c=='X': openfile.write("CLEAR.")
             elif c=='c': openfile.write("COLOR.")
             elif c=='h': openfile.write("HALT.")
+            i+=1
+            if i%16==0:openfile.write("\n")
         sys.stdout.write("done.\n")
     sys.exit(0)
 
